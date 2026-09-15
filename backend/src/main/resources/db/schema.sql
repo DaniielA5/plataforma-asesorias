@@ -1,61 +1,55 @@
 -- Schema MVP — plataforma de asesorías
--- MySQL 8+
+-- PostgreSQL 14+
 
-CREATE DATABASE IF NOT EXISTS asesorias_db
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS inscripciones      CASCADE;
+DROP TABLE IF EXISTS asesorias          CASCADE;
+DROP TABLE IF EXISTS profesor_materia   CASCADE;
+DROP TABLE IF EXISTS materias           CASCADE;
+DROP TABLE IF EXISTS usuarios           CASCADE;
 
-USE asesorias_db;
+DROP TYPE IF EXISTS rol_usuario;
+DROP TYPE IF EXISTS estado_asesoria;
 
-DROP TABLE IF EXISTS inscripciones;
-DROP TABLE IF EXISTS asesorias;
-DROP TABLE IF EXISTS profesor_materia;
-DROP TABLE IF EXISTS materias;
-DROP TABLE IF EXISTS usuarios;
+CREATE TYPE rol_usuario     AS ENUM ('ALUMNO', 'PROFESOR');
+CREATE TYPE estado_asesoria AS ENUM ('ACTIVA', 'CANCELADA');
 
 CREATE TABLE usuarios (
-  id             BIGINT AUTO_INCREMENT PRIMARY KEY,
+  id             BIGSERIAL PRIMARY KEY,
   correo         VARCHAR(120) NOT NULL UNIQUE,
   password_hash  VARCHAR(255) NOT NULL,
   nombre         VARCHAR(120) NOT NULL,
-  rol            ENUM('ALUMNO','PROFESOR') NOT NULL,
-  creado_en      DATETIME DEFAULT CURRENT_TIMESTAMP
+  rol            rol_usuario  NOT NULL,
+  creado_en      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE materias (
-  id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+  id      BIGSERIAL PRIMARY KEY,
   codigo  VARCHAR(20)  NOT NULL UNIQUE,
   nombre  VARCHAR(120) NOT NULL
 );
 
 CREATE TABLE profesor_materia (
-  profesor_id BIGINT NOT NULL,
-  materia_id  BIGINT NOT NULL,
-  PRIMARY KEY (profesor_id, materia_id),
-  FOREIGN KEY (profesor_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-  FOREIGN KEY (materia_id)  REFERENCES materias(id) ON DELETE CASCADE
+  profesor_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  materia_id  BIGINT NOT NULL REFERENCES materias(id) ON DELETE CASCADE,
+  PRIMARY KEY (profesor_id, materia_id)
 );
 
 CREATE TABLE asesorias (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  profesor_id  BIGINT NOT NULL,
-  materia_id   BIGINT NOT NULL,
+  id           BIGSERIAL PRIMARY KEY,
+  profesor_id  BIGINT NOT NULL REFERENCES usuarios(id),
+  materia_id   BIGINT NOT NULL REFERENCES materias(id),
   fecha        DATE   NOT NULL,
   hora         TIME   NOT NULL,
   lugar        VARCHAR(120) NOT NULL,
-  cupo_max     INT    NOT NULL,
-  estado       ENUM('ACTIVA','CANCELADA') NOT NULL DEFAULT 'ACTIVA',
-  notas        VARCHAR(500),
-  FOREIGN KEY (profesor_id) REFERENCES usuarios(id),
-  FOREIGN KEY (materia_id)  REFERENCES materias(id),
-  CHECK (cupo_max > 0)
+  cupo_max     INT    NOT NULL CHECK (cupo_max > 0),
+  estado       estado_asesoria NOT NULL DEFAULT 'ACTIVA',
+  notas        VARCHAR(500)
 );
 
 CREATE TABLE inscripciones (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  asesoria_id  BIGINT NOT NULL,
-  alumno_id    BIGINT NOT NULL,
-  inscrito_en  DATETIME DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (asesoria_id, alumno_id),
-  FOREIGN KEY (asesoria_id) REFERENCES asesorias(id) ON DELETE CASCADE,
-  FOREIGN KEY (alumno_id)   REFERENCES usuarios(id)
+  id           BIGSERIAL PRIMARY KEY,
+  asesoria_id  BIGINT NOT NULL REFERENCES asesorias(id) ON DELETE CASCADE,
+  alumno_id    BIGINT NOT NULL REFERENCES usuarios(id),
+  inscrito_en  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (asesoria_id, alumno_id)
 );
