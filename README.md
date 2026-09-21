@@ -40,4 +40,3 @@ Instrucciones se agregarán conforme avance el proyecto.
 
 ## Equipo
 
-Proyecto en parejas — materia Programación Web, Semestre 7.
