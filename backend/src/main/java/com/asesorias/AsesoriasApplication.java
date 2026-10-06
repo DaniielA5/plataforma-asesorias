@@ -1,4 +1,4 @@
-package com.asesorias.asesorias;
+package com.asesorias;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,5 +1,3 @@
--- Schema MVP — plataforma de asesorías
--- PostgreSQL 14+
 
 DROP TABLE IF EXISTS inscripciones      CASCADE;
 DROP TABLE IF EXISTS asesorias          CASCADE;
@@ -10,15 +8,12 @@ DROP TABLE IF EXISTS usuarios           CASCADE;
 DROP TYPE IF EXISTS rol_usuario;
 DROP TYPE IF EXISTS estado_asesoria;
 
-CREATE TYPE rol_usuario     AS ENUM ('ALUMNO', 'PROFESOR');
-CREATE TYPE estado_asesoria AS ENUM ('ACTIVA', 'CANCELADA');
-
 CREATE TABLE usuarios (
   id             BIGSERIAL PRIMARY KEY,
   correo         VARCHAR(120) NOT NULL UNIQUE,
   password_hash  VARCHAR(255) NOT NULL,
   nombre         VARCHAR(120) NOT NULL,
-  rol            rol_usuario  NOT NULL,
+  rol            VARCHAR(20)  NOT NULL CHECK (rol IN ('ALUMNO','PROFESOR')),
   creado_en      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -42,7 +37,7 @@ CREATE TABLE asesorias (
   hora         TIME   NOT NULL,
   lugar        VARCHAR(120) NOT NULL,
   cupo_max     INT    NOT NULL CHECK (cupo_max > 0),
-  estado       estado_asesoria NOT NULL DEFAULT 'ACTIVA',
+  estado       VARCHAR(20) NOT NULL DEFAULT 'ACTIVA' CHECK (estado IN ('ACTIVA','CANCELADA')),
   notas        VARCHAR(500)
 );
 
