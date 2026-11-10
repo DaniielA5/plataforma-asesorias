@@ -6,7 +6,7 @@ Sistema web para coordinar asesorías académicas entre alumnos y profesores: pu
 
 ## Stack
 
-- **Backend:** Java 17 + Spring Boot 3 + Spring Security + JWT
+- **Backend:** Java 21 + Spring Boot 4.1 + Spring Security + JWT
 - **Frontend:** React + Vite
 - **Base de datos:** PostgreSQL 14+
 - **Comunicación:** REST + JSON
