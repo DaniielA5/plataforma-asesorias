@@ -1,7 +1,21 @@
 package com.asesorias.usuario;
 
-public enum Rol {
-    ALUMNO,
-    PROFESOR
-    
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "roles")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Rol {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true, length = 20)
+    private NombreRol nombre;
 }
