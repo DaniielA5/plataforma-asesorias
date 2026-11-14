@@ -1,6 +1,6 @@
 package com.asesorias.inscripcion;
 
-import com.asesorias.asesorias.Asesoria;
+import com.asesorias.asesoria.Asesoria;
 import com.asesorias.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.asesorias.asesorias;
+package com.asesorias.asesoria;
 
 import com.asesorias.materia.Materia;
 import com.asesorias.usuario.Usuario;

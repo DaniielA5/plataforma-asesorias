@@ -1,4 +1,4 @@
-package com.asesorias.asesorias;
+package com.asesorias.asesoria;
 
 public enum EstadoAsesoria { 
     ACTIVA,

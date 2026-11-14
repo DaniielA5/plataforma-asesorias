@@ -1,5 +1,6 @@
 package com.asesorias.materia;
 
-public class MateriaRepository {
-    
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MateriaRepository extends JpaRepository<Materia, Long> {
 }
