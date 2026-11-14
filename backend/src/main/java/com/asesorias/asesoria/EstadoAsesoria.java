@@ -1,5 +1,6 @@
 package com.asesorias.asesorias;
 
-public class EstadoAsesoria {
-    
+public enum EstadoAsesoria { 
+    ACTIVA,
+    CANCELADA
 }
