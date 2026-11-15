@@ -11,8 +11,13 @@ spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.open-in-view=false
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
+
+
+# Clave HMAC en Base64 de 32 bytes o más. Para generarla en PowerShell:
+# $b = New-Object byte[] 32; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); [Convert]::ToBase64String($b)
 app.jwt.secreto=
 app.jwt.minutos=120
+
 
 # ===== Servidor =====
 server.port=8080

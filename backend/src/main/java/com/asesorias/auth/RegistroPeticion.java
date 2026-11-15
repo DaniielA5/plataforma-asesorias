@@ -22,7 +22,7 @@ public record RegistroPeticion(
 
         @NotBlank(message = "Escribe tu teléfono")
         @Pattern(regexp = "^\\+[1-9]\\d{9,14}$",
-                message = "Escribe el teléfono con lada, por ejemplo +52 951 234 5672")
+                message = "Escribe el teléfono con lada, por ejemplo +529512345672")
         String telefono
 ) {
 }
