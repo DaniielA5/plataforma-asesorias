@@ -1,0 +1,40 @@
+:root {
+  /* Base (60%) */
+  --color-fondo: #F2EDE4;
+  --color-superficie: #FBF7EF;
+  --color-superficie-2: #ECE4D4;
+  --color-borde: #DED5C2;
+
+  /* Texto */
+  --color-texto: #1F2A22;
+  --color-texto-secundario: #5C6A5F;
+  --color-texto-suave: #92968E;
+
+  /* Primario (30%) */
+  --color-primario: #263128;
+  --color-primario-texto: #F2EDE4;
+
+  /* Acento (10%) */
+  --color-acento: #BC6245;
+  --color-acento-texto: #FBF7EF;
+  --color-acento-suave: #F0D9CC;
+
+  /* Secundarios y estados */
+  --color-secundario-suave: #DDE4CB;
+  --color-exito: #8EA67A;
+  --color-error: #A63D2F;
+
+  /* Tintes de las tarjetas de materias */
+  --color-tinte-gris: #D7DBCF;
+  --color-tinte-amarillo: #F4E2C3;
+
+  /* Espaciados (Figma: Layout/Spacing) */
+  --espacio-base: 8px;
+  --espacio-seccion: 24px;
+  --espacio-pagina: 32px;
+
+  /* Radios (Figma: Layout/Radius) */
+  --radio-control: 10px;
+  --radio-tarjeta: 18px;
+  --radio-pastilla: 999px;
+}
