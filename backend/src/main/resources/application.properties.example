@@ -11,6 +11,8 @@ spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.open-in-view=false
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
+app.jwt.secreto=
+app.jwt.minutos=120
 
 # ===== Servidor =====
 server.port=8080
