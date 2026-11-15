@@ -37,4 +37,9 @@ public class AuthController {
     public UsuarioRespuesta yo(@AuthenticationPrincipal Jwt jwt) {
         return authService.usuarioActual(Long.valueOf(jwt.getSubject()));
     }
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@AuthenticationPrincipal Jwt jwt) {
+        authService.logout(jwt);
+    }
 }

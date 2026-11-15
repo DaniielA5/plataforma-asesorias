@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 public class AuthService {
@@ -21,13 +23,15 @@ public class AuthService {
     private final RolRepository roles;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final TokenRevocadoRepository tokensRevocados;
 
-    public AuthService(UsuarioRepository usuarios, RolRepository roles,
-                       PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(UsuarioRepository usuarios, RolRepository roles, PasswordEncoder passwordEncoder,
+                       JwtService jwtService, TokenRevocadoRepository tokensRevocados) {
         this.usuarios = usuarios;
         this.roles = roles;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.tokensRevocados = tokensRevocados;
     }
 
     @Transactional
@@ -64,6 +68,13 @@ public class AuthService {
         return usuarios.findConRolById(id)
                 .map(UsuarioRespuesta::de)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El usuario ya no existe"));
+    }
+    @Transactional
+    public void logout(Jwt jwt) {
+        TokenRevocado revocado = new TokenRevocado();
+        revocado.setJti(jwt.getId());
+        revocado.setExpiraEn(LocalDateTime.ofInstant(jwt.getExpiresAt(), ZoneId.systemDefault()));
+        tokensRevocados.save(revocado);
     }
 
     private TokenRespuesta responderConToken(Usuario usuario) {
