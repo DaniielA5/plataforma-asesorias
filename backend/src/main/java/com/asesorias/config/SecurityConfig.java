@@ -20,8 +20,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 import com.asesorias.auth.ValidadorTokenRevocado;
 import org.springframework.security.oauth2.jwt.JwtValidators;
-import com.asesorias.auth.ValidadorTokenRevocado;
-
+ 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
