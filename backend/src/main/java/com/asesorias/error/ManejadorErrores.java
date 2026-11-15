@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -47,7 +48,15 @@ public class ManejadorErrores {
     // 401 falló la autenticación 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorRespuesta> noAutenticado(AuthenticationException ex, HttpServletRequest req) {
-        return responder(HttpStatus.UNAUTHORIZED, "Credenciales inválidas", req, null);
+        String mensaje;
+        if (ex instanceof InsufficientAuthenticationException) {
+            mensaje = "Necesitas iniciar sesión";
+        } else if (ex instanceof InvalidBearerTokenException) {
+            mensaje = "Tu sesión expiró o no es válida";
+        } else {
+            mensaje = "Correo o contraseña incorrectos";
+        }
+        return responder(HttpStatus.UNAUTHORIZED, mensaje, req, null);
     }
 
     // 403 @PreAuthorize neg el acceso
