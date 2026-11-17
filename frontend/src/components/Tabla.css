@@ -1,0 +1,47 @@
+.tabla__contenedor {
+  overflow-x: auto;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+}
+
+.tabla__tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla__tabla th,
+.tabla__tabla td {
+  padding: calc(var(--espacio-base) * 1.5) calc(var(--espacio-base) * 2);
+  text-align: left;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tabla__tabla th {
+  background: var(--color-superficie-2);
+  color: var(--color-texto-secundario);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.tabla__tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla__vacio {
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+.tabla__paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espacio-base);
+  margin-top: var(--espacio-base);
+}
+
+.tabla__pagina {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}

@@ -1,0 +1,22 @@
+.boton {
+  padding: var(--espacio-base) calc(var(--espacio-base) * 2);
+  border: none;
+  border-radius: var(--radio-control);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.boton--primario {
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+}
+
+.boton--secundario {
+  background: var(--color-superficie-2);
+  color: var(--color-texto);
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
