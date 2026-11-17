@@ -23,8 +23,13 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
         "FROM Inscripcion i WHERE i.asesoria.id IN :ids GROUP BY i.asesoria.id")
     List<ConteoInscritos> contarPorAsesorias(@Param("ids") List<Long> ids);
 
+    @EntityGraph(attributePaths = {"asesoria", "asesoria.materia", "alumno"})
+    java.util.Optional<Inscripcion> findByAsesoriaIdAndAlumnoId(Long asesoriaId, Long alumnoId);
+    
     interface ConteoInscritos {
         Long getAsesoriaId();
         Long getTotal();
     }
+
+    
 }
