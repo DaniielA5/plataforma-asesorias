@@ -13,7 +13,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.asesorias.inscripcion.Inscripcion;
+import com.asesorias.notificacion.NotificacionService;
 
+import java.util.List;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,13 +28,16 @@ public class AsesoriaService {
     private final InscripcionRepository inscripciones;
     private final MateriaRepository materias;
     private final UsuarioRepository usuarios;
+    private final NotificacionService notificaciones;
 
     public AsesoriaService(AsesoriaRepository asesorias, InscripcionRepository inscripciones,
-                            MateriaRepository materias, UsuarioRepository usuarios) {
+                            MateriaRepository materias, UsuarioRepository usuarios,
+                            NotificacionService notificaciones) {
         this.asesorias = asesorias;
         this.inscripciones = inscripciones;
         this.materias = materias;
         this.usuarios = usuarios;
+        this.notificaciones = notificaciones;
     }
 
     @Transactional(readOnly = true)
@@ -101,7 +107,16 @@ public class AsesoriaService {
         Asesoria asesoria = buscarPropia(profesorId, id);
         asesoria.setEstado(EstadoAsesoria.CANCELADA);
 
-        return AsesoriaRespuesta.de(asesoria, inscripciones.countByAsesoriaId(id));
+        List<Inscripcion> inscritos = inscripciones.findByAsesoriaId(id);
+        for (Inscripcion i : inscritos) {
+            notificaciones.enviarWhatsapp(i.getAlumno(), mensajeCancelacionAsesoria(asesoria));
+        }
+
+        return AsesoriaRespuesta.de(asesoria, inscritos.size());
+    }
+
+    private String mensajeCancelacionAsesoria(Asesoria asesoria) {
+        return "Se canceló la asesoría de " + asesoria.getMateria().getNombre() + " del " + asesoria.getFecha();
     }
 
     private void aplicarCambios(Asesoria asesoria, Materia materia, AsesoriaPeticion peticion) {
