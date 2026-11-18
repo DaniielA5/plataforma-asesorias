@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
-    private static final String PASSWORD_PROFESOR = "Profesor123!";
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final MateriaRepository materiaRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final String PASSWORD_PROFESOR = "Profesor123!";
+    private static final String PASSWORD_ALUMNO = "Alumno123!";
+
+    @Value("${seed.alumno.correo:carlos.juarez@asesorias.com}")
+    private String correoAlumnoPrueba;
+
+    @Value("${seed.alumno.telefono:+529510000001}")
+    private String telefonoAlumnoPrueba;
 
     @Override
     @Transactional
@@ -41,6 +49,7 @@ public class DataSeeder implements CommandLineRunner {
         crearAdministrador();
         List<Materia> materias = crearMaterias();
         List<Usuario> profesores = crearProfesores(materias);
+        List<Usuario> alumnos = crearAlumnos();
     }
 
     private void crearAdministrador() {
@@ -107,6 +116,32 @@ public class DataSeeder implements CommandLineRunner {
 
         log.info("Seeder: {} profesores creados.", profesores.size());
         return profesores;
+    }
+
+
+        private List<Usuario> crearAlumnos() {
+        Rol rolAlumno = buscarRol(NombreRol.ALUMNO);
+
+        String[][] datos = {
+            {"Isaac Diaz", correoAlumnoPrueba, telefonoAlumnoPrueba},
+            {"María Hernández", "maria.hernandez@asesorias.com", "+529510000002"},
+            {"Diego Pérez", "diego.perez@asesorias.com", "+529510000003"},
+            {"Ana López", "ana.lopez@asesorias.com", "+529510000004"},
+            {"Jorge Santos", "jorge.santos@asesorias.com", "+529510000005"},
+            {"Valeria Cruz", "valeria.cruz@asesorias.com", "+529510000006"},
+            {"Mateo Ramos", "mateo.ramos@asesorias.com", "+529510000007"},
+            {"Camila Torres", "camila.torres@asesorias.com", "+529510000008"},
+            {"Pablo Vargas", "pablo.vargas@asesorias.com", "+529510000009"},
+            {"Fernanda Ortiz", "fernanda.ortiz@asesorias.com", "+529510000010"}
+        };
+
+        List<Usuario> alumnos = new ArrayList<>();
+        for (String[] fila : datos) {
+            alumnos.add(crearUsuario(rolAlumno, fila[0], fila[1], PASSWORD_ALUMNO, fila[2]));
+        }
+
+        log.info("Seeder: {} alumnos creados.", alumnos.size());
+        return alumnos;
     }
 
     private Rol buscarRol(NombreRol nombre) {
