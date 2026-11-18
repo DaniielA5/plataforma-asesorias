@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import RutaProtegida from './components/RutaProtegida'
+import CatalogoAsesorias from './pages/CatalogoAsesorias'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
@@ -29,8 +30,18 @@ function App() {
             <PanelAdmin />
           </RutaProtegida>
         }
+        
+      />
+            <Route
+        path="/asesorias"
+        element={
+          <RutaProtegida>
+            <CatalogoAsesorias />
+          </RutaProtegida>
+        }
       />
     </Routes>
+    
   )
 }
 

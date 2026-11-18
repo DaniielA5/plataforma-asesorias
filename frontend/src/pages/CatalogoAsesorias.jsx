@@ -1,0 +1,108 @@
+import { useEffect, useState } from 'react'
+import { listarAsesorias, inscribirse } from '../api/asesorias'
+import { listarMaterias } from '../api/materias'
+import { useAuth } from '../context/AuthContext'
+import Tabla from '../components/Tabla'
+import Spinner from '../components/Spinner'
+import AvisoError from '../components/AvisoError'
+import Boton from '../components/Boton'
+
+export default function CatalogoAsesorias() {
+  const { usuario } = useAuth()
+  const [materias, setMaterias] = useState([])
+  const [materiaId, setMateriaId] = useState('')
+  const [pagina, setPagina] = useState(null)
+  const [page, setPage] = useState(0)
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState(false)
+  const [inscribiendoId, setInscribiendoId] = useState(null)
+
+  useEffect(() => {
+    listarMaterias().then(setMaterias).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    cargar()
+  }, [materiaId, page])
+
+  function cargar() {
+    setCargando(true)
+    setError(false)
+    listarAsesorias({ materiaId, page })
+      .then(setPagina)
+      .catch(() => setError(true))
+      .finally(() => setCargando(false))
+  }
+
+  async function alInscribirme(asesoriaId) {
+    setInscribiendoId(asesoriaId)
+    try {
+      await inscribirse(asesoriaId)
+      cargar()
+    } catch (err) {
+      alert(err.response?.data?.mensaje || 'No se pudo inscribir')
+    } finally {
+      setInscribiendoId(null)
+    }
+  }
+
+  const columnas = [
+    { clave: 'materiaNombre', titulo: 'Materia' },
+    { clave: 'profesorNombre', titulo: 'Profesor' },
+    { clave: 'fecha', titulo: 'Fecha' },
+    { clave: 'hora', titulo: 'Hora' },
+    { clave: 'lugar', titulo: 'Lugar' },
+    { clave: 'cupo', titulo: 'Cupo', render: (fila) => `${fila.inscritos}/${fila.cupoMax}` },
+    {
+      clave: 'accion',
+      titulo: '',
+      render: (fila) => {
+        if (usuario?.rol !== 'ALUMNO') return null
+        const llena = fila.inscritos >= fila.cupoMax
+        return (
+          <Boton
+            variante="secundario"
+            deshabilitado={llena || inscribiendoId === fila.id}
+            onClick={() => alInscribirme(fila.id)}
+          >
+            {llena ? 'Sin cupo' : 'Inscribirme'}
+          </Boton>
+        )
+      },
+    },
+  ]
+
+  return (
+    <section>
+      <h1>Catálogo de asesorías</h1>
+
+      <label htmlFor="filtro-materia">Materia</label>
+      <select
+        id="filtro-materia"
+        value={materiaId}
+        onChange={(e) => {
+          setPage(0)
+          setMateriaId(e.target.value)
+        }}
+      >
+        <option value="">Todas</option>
+        {materias.map((m) => (
+          <option key={m.id} value={m.id}>{m.nombre}</option>
+        ))}
+      </select>
+
+      {cargando && <Spinner mensaje="Cargando asesorías..." />}
+      {!cargando && error && <AvisoError onReintentar={cargar} />}
+      {!cargando && !error && pagina && (
+        <Tabla
+          columnas={columnas}
+          filas={pagina.content}
+          page={pagina.page}
+          totalPages={pagina.totalPages}
+          onPageChange={setPage}
+          mensajeVacio="No hay asesorías con ese filtro."
+        />
+      )}
+    </section>
+  )
+}
