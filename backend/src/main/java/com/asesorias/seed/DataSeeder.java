@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
+    private static final String PASSWORD_PROFESOR = "Profesor123!";
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final MateriaRepository materiaRepository;
@@ -39,6 +40,7 @@ public class DataSeeder implements CommandLineRunner {
 
         crearAdministrador();
         List<Materia> materias = crearMaterias();
+        List<Usuario> profesores = crearProfesores(materias);
     }
 
     private void crearAdministrador() {
@@ -74,6 +76,37 @@ public class DataSeeder implements CommandLineRunner {
         List<Materia> guardadas = materiaRepository.saveAll(materias);
         log.info("Seeder: {} materias creadas.", guardadas.size());
         return guardadas;
+    }
+
+        private List<Usuario> crearProfesores(List<Materia> materias) {
+        Rol rolProfesor = buscarRol(NombreRol.PROFESOR);
+
+        String[][] datos = {
+            {"Aracely Ramirez", "aracely.ramirez@asesorias.com"},
+            {"Adelina Martinez", "adelina.mtz@asesorias.com"},
+            {"Bibiana Diaz", "bibiana.diaz@asesorias.com"},
+            {"Luis Alonso", "luis.alonso@asesorias.com"}
+        };
+
+        // Posiciones (0 a 11) de las materias que imparte cada profesor
+        int[][] materiasDeCadaProfesor = {
+            {0, 1, 3},
+            {4, 5, 11},
+            {1, 2, 7, 8},
+            {6, 9, 10}
+        };
+
+        List<Usuario> profesores = new ArrayList<>();
+        for (int i = 0; i < datos.length; i++) {
+            Usuario profesor = crearUsuario(rolProfesor, datos[i][0], datos[i][1], PASSWORD_PROFESOR, null);
+            for (int posicion : materiasDeCadaProfesor[i]) {
+                profesor.getMateriasImpartidas().add(materias.get(posicion));
+            }
+            profesores.add(usuarioRepository.save(profesor));
+        }
+
+        log.info("Seeder: {} profesores creados.", profesores.size());
+        return profesores;
     }
 
     private Rol buscarRol(NombreRol nombre) {
