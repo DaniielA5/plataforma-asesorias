@@ -14,6 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import com.asesorias.asesoria.Asesoria;
+import com.asesorias.asesoria.AsesoriaRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,7 @@ public class DataSeeder implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private static final String PASSWORD_PROFESOR = "Profesor123!";
     private static final String PASSWORD_ALUMNO = "Alumno123!";
+     private final AsesoriaRepository asesoriaRepository;
 
     @Value("${seed.alumno.correo:carlos.juarez@asesorias.com}")
     private String correoAlumnoPrueba;
@@ -50,6 +55,7 @@ public class DataSeeder implements CommandLineRunner {
         List<Materia> materias = crearMaterias();
         List<Usuario> profesores = crearProfesores(materias);
         List<Usuario> alumnos = crearAlumnos();
+        List<Asesoria> asesorias = crearAsesorias(profesores, materias);
     }
 
     private void crearAdministrador() {
@@ -142,6 +148,54 @@ public class DataSeeder implements CommandLineRunner {
 
         log.info("Seeder: {} alumnos creados.", alumnos.size());
         return alumnos;
+    }
+
+
+        private List<Asesoria> crearAsesorias(List<Usuario> profesores, List<Materia> materias) {
+        // Cada fila: {profesor, materia, días desde hoy, hora, cupo}
+        // El profesor y la materia son posiciones en las listas (profesor 0 a 3, materia 0 a 11).
+        int[][] datos = {
+            {0, 0, 1, 16, 6},
+            {0, 1, 2, 10, 8},
+            {0, 3, 4, 12, 5},
+            {1, 4, 1, 11, 6},
+            {1, 5, 3, 13, 4},
+            {1, 11, 5, 9, 10},
+            {2, 1, 2, 14, 6},
+            {2, 2, 3, 16, 8},
+            {2, 7, 6, 10, 5},
+            {2, 8, 7, 12, 6},
+            {3, 6, 2, 9, 7},
+            {3, 9, 4, 15, 10},
+            {3, 10, 5, 17, 8},
+            {3, 9, 8, 11, 12},
+            {1, 4, 9, 10, 6}
+        };
+
+        // Un lugar por cada fila de arriba, en el mismo orden
+        String[] lugares = {
+            "Aula B-204", "Aula B-205", "Aula B-110",
+            "Lab de química", "Lab de química", "Aula C-101",
+            "Aula A-12", "Aula A-14", "Lab de física", "Lab de física",
+            "Lab de biología", "Sala de cómputo 1", "Sala de cómputo 2",
+            "Sala de cómputo 1", "Lab de química"
+        };
+
+        List<Asesoria> asesorias = new ArrayList<>();
+        for (int i = 0; i < datos.length; i++) {
+            Asesoria asesoria = new Asesoria();
+            asesoria.setProfesor(profesores.get(datos[i][0]));
+            asesoria.setMateria(materias.get(datos[i][1]));
+            asesoria.setFecha(LocalDate.now().plusDays(datos[i][2]));
+            asesoria.setHora(LocalTime.of(datos[i][3], 0));
+            asesoria.setLugar(lugares[i]);
+            asesoria.setCupoMax(datos[i][4]);
+            asesorias.add(asesoria);
+        }
+
+        List<Asesoria> guardadas = asesoriaRepository.saveAll(asesorias);
+        log.info("Seeder: {} asesorías creadas.", guardadas.size());
+        return guardadas;
     }
 
     private Rol buscarRol(NombreRol nombre) {
