@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/materias")
@@ -34,13 +35,14 @@ public class MateriaController {
         return materias.listar(q, pageable);
     }
 
+
     @GetMapping("/{id}")
     public MateriaResponse ver(@PathVariable Long id) {
         return materias.ver(id);
     }
 
 
-        @PostMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     public MateriaResponse crear(@Valid @RequestBody MateriaRequest peticion) {
@@ -58,5 +60,17 @@ public class MateriaController {
     @PreAuthorize("hasRole('ADMIN')")
     public void eliminar(@PathVariable Long id) {
         materias.eliminar(id);
+    }
+
+        @GetMapping("/profesores/{profesorId}")
+    public List<MateriaResponse> materiasDeProfesor(@PathVariable Long profesorId) {
+        return materias.materiasDeProfesor(profesorId);
+    }
+
+    @PutMapping("/profesores/{profesorId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<MateriaResponse> asignarAProfesor(@PathVariable Long profesorId,
+                                                  @Valid @RequestBody AsignacionMateriasRequest peticion) {
+        return materias.asignarAProfesor(profesorId, peticion);
     }
 }
