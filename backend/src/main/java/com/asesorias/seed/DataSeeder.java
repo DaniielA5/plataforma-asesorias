@@ -18,6 +18,8 @@ import com.asesorias.asesoria.Asesoria;
 import com.asesorias.asesoria.AsesoriaRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import com.asesorias.inscripcion.Inscripcion;
+import com.asesorias.inscripcion.InscripcionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,8 @@ public class DataSeeder implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private static final String PASSWORD_PROFESOR = "Profesor123!";
     private static final String PASSWORD_ALUMNO = "Alumno123!";
-     private final AsesoriaRepository asesoriaRepository;
+    private final AsesoriaRepository asesoriaRepository;
+    private final InscripcionRepository inscripcionRepository;
 
     @Value("${seed.alumno.correo:carlos.juarez@asesorias.com}")
     private String correoAlumnoPrueba;
@@ -56,6 +59,7 @@ public class DataSeeder implements CommandLineRunner {
         List<Usuario> profesores = crearProfesores(materias);
         List<Usuario> alumnos = crearAlumnos();
         List<Asesoria> asesorias = crearAsesorias(profesores, materias);
+        crearInscripciones(asesorias, alumnos);
     }
 
     private void crearAdministrador() {
@@ -196,6 +200,47 @@ public class DataSeeder implements CommandLineRunner {
         List<Asesoria> guardadas = asesoriaRepository.saveAll(asesorias);
         log.info("Seeder: {} asesorías creadas.", guardadas.size());
         return guardadas;
+    }
+
+
+        private void crearInscripciones(List<Asesoria> asesorias, List<Usuario> alumnos) {
+        // Cada fila: {posición de la asesoría, posición del alumno}
+        int[][] datos = {
+            {0, 0}, {0, 1}, {0, 2},
+            {1, 0}, {1, 3},
+            {2, 4},
+            {3, 0}, {3, 5},
+            {4, 1}, {4, 2}, {4, 3}, {4, 6},
+            {5, 7},
+            {6, 0}, {6, 8},
+            {7, 9},
+            {8, 1},
+            {9, 2},
+            {10, 3},
+            {11, 0},
+            {12, 4}
+        };
+
+        int[] inscritosPorAsesoria = new int[asesorias.size()];
+        List<Inscripcion> inscripciones = new ArrayList<>();
+
+        for (int[] fila : datos) {
+            Asesoria asesoria = asesorias.get(fila[0]);
+
+            inscritosPorAsesoria[fila[0]]++;
+            if (inscritosPorAsesoria[fila[0]] > asesoria.getCupoMax()) {
+                throw new IllegalStateException(
+                        "El seeder pasa el cupo de la asesoría " + fila[0] + ". Revisa los datos.");
+            }
+
+            Inscripcion inscripcion = new Inscripcion();
+            inscripcion.setAsesoria(asesoria);
+            inscripcion.setAlumno(alumnos.get(fila[1]));
+            inscripciones.add(inscripcion);
+        }
+
+        inscripcionRepository.saveAll(inscripciones);
+        log.info("Seeder: {} inscripciones creadas.", inscripciones.size());
     }
 
     private Rol buscarRol(NombreRol nombre) {
