@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import RutaProtegida from './components/RutaProtegida'
 import CatalogoAsesorias from './pages/CatalogoAsesorias'
+import MisAsesorias from './pages/MisAsesorias'
+import PanelProfesor from './pages/PanelProfesor'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
@@ -32,11 +34,27 @@ function App() {
         }
         
       />
-            <Route
+        <Route
         path="/asesorias"
         element={
           <RutaProtegida>
             <CatalogoAsesorias />
+          </RutaProtegida>
+        }
+      />
+            <Route
+        path="/mis-asesorias"
+        element={
+          <RutaProtegida rolesPermitidos={['ALUMNO']}>
+            <MisAsesorias />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/panel-profesor"
+        element={
+          <RutaProtegida rolesPermitidos={['PROFESOR']}>
+            <PanelProfesor />
           </RutaProtegida>
         }
       />
