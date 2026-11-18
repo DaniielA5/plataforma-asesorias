@@ -8,4 +8,6 @@ public interface MateriaRepository extends JpaRepository<Materia, Long> {
 
     Page<Materia> findByNombreContainingIgnoreCaseOrCodigoContainingIgnoreCase(
             String nombre, String codigo, Pageable pageable);
+              boolean existsByCodigo(String codigo);
+              boolean existsByCodigoAndIdNot(String codigo, Long id);
 }
