@@ -1,5 +1,7 @@
 package com.asesorias.seed;
 
+import com.asesorias.materia.Materia;
+import com.asesorias.materia.MateriaRepository;
 import com.asesorias.usuario.NombreRol;
 import com.asesorias.usuario.Rol;
 import com.asesorias.usuario.RolRepository;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final MateriaRepository materiaRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -32,12 +38,42 @@ public class DataSeeder implements CommandLineRunner {
         log.info("Seeder: base vacía, insertando datos de ejemplo...");
 
         crearAdministrador();
+        List<Materia> materias = crearMaterias();
     }
 
     private void crearAdministrador() {
         Rol rolAdmin = buscarRol(NombreRol.ADMIN);
         crearUsuario(rolAdmin, "Administrador", "admin@asesorias.com", "Admin123!", null);
         log.info("Seeder: administrador creado.");
+    }
+
+    private List<Materia> crearMaterias() {
+        String[][] datos = {
+            {"MAT-101", "Cálculo integral"},
+            {"MAT-102", "Cálculo diferencial"},
+            {"MAT-103", "Geometría analítica"},
+            {"MAT-104", "Álgebra lineal"},
+            {"QUI-101", "Química orgánica"},
+            {"QUI-102", "Química inorgánica"},
+            {"BIO-101", "Biología celular"},
+            {"FIS-101", "Física mecánica"},
+            {"FIS-102", "Electricidad y magnetismo"},
+            {"PRO-101", "Programación básica"},
+            {"PRO-102", "Estructuras de datos"},
+            {"EST-101", "Probabilidad y estadística"}
+        };
+
+        List<Materia> materias = new ArrayList<>();
+        for (String[] fila : datos) {
+            Materia materia = new Materia();
+            materia.setCodigo(fila[0]);
+            materia.setNombre(fila[1]);
+            materias.add(materia);
+        }
+
+        List<Materia> guardadas = materiaRepository.saveAll(materias);
+        log.info("Seeder: {} materias creadas.", guardadas.size());
+        return guardadas;
     }
 
     private Rol buscarRol(NombreRol nombre) {
