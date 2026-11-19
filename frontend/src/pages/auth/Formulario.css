@@ -1,0 +1,39 @@
+.formulario-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-pagina);
+}
+
+.formulario {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espacio-base) * 2);
+  padding: var(--espacio-pagina);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+}
+
+.formulario__logo {
+  height: 40px;
+  align-self: flex-start;
+}
+
+.formulario__titulo {
+  margin: 0;
+  color: var(--color-primario);
+}
+
+@media (max-width: 480px) {
+  .formulario-pagina {
+    padding: var(--espacio-base);
+  }
+
+  .formulario {
+    padding: var(--espacio-seccion);
+  }
+}
