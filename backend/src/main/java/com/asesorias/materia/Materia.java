@@ -1,7 +1,5 @@
 package com.asesorias.materia;
 
-import org.hibernate.annotations.Collate;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
