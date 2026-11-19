@@ -32,6 +32,7 @@ export function validarTelefono(telefono) {
   const texto = telefono.trim()
   if (!texto) return 'El teléfono es obligatorio'
   if (!/^\+[1-9]\d{9,14}$/.test(texto)) return 'Usa el formato internacional sin espacios, por ejemplo +529512345672'
+  if (texto.startsWith('+52') && !/^\+52\d{10}$/.test(texto)) return 'Un número de México lleva +52 y 10 dígitos, por ejemplo +529512345672'
   return ''
 }
 
