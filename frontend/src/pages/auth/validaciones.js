@@ -31,7 +31,7 @@ export function validarNombre(nombre) {
 export function validarTelefono(telefono) {
   const texto = telefono.trim()
   if (!texto) return 'El teléfono es obligatorio'
-  if (!/^\+\d{10,15}$/.test(texto)) return 'Usa el formato internacional sin espacios, por ejemplo +529512345672'
+  if (!/^\+[1-9]\d{9,14}$/.test(texto)) return 'Usa el formato internacional sin espacios, por ejemplo +529512345672'
   return ''
 }
 
