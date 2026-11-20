@@ -21,3 +21,9 @@ app.jwt.minutos=120
 
 # ===== Servidor =====
 server.port=8080
+
+# ===== Correo (Postfix local en el VPS, vía Mailgun) =====
+# En desarrollo local no hace falta: no hay Postfix corriendo, no configures esto en tu máquina.
+spring.mail.host=localhost
+spring.mail.port=25
+app.correo.remitente=no-reply@mg.juarez.top
