@@ -42,4 +42,16 @@ public class AuthController {
     public void logout(@AuthenticationPrincipal Jwt jwt) {
         authService.logout(jwt);
     }
+
+    @PostMapping("/recuperar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void recuperar(@Valid @RequestBody RecuperacionPeticion peticion) {
+        authService.recuperar(peticion);
+    }
+
+    @PostMapping("/restablecer")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void restablecer(@Valid @RequestBody RestablecerPeticion peticion) {
+        authService.restablecer(peticion);
+    }
 }
