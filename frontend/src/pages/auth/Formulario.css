@@ -36,4 +36,20 @@
   .formulario {
     padding: var(--espacio-seccion);
   }
+
+
+  .formulario__texto {
+  margin: 0;
+  color: var(--color-texto-secundario);
+}
+
+.formulario__exito {
+  margin: 0;
+  padding: calc(var(--espacio-base) * 2);
+  background: var(--color-secundario-suave);
+  border-left: 4px solid var(--color-exito);
+  border-radius: var(--radio-control);
+  color: var(--color-texto);
+}
+
 }
