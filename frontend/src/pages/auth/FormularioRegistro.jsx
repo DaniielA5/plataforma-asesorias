@@ -13,6 +13,7 @@ import {
   validarTelefono,
 } from './validaciones'
 import './Formulario.css'
+import { Link } from 'react-router-dom'
 
 function FormularioRegistro({ onSubmit, enviando = false, errorGeneral = '' }) {
   const [datos, setDatos] = useState({
@@ -120,6 +121,11 @@ function FormularioRegistro({ onSubmit, enviando = false, errorGeneral = '' }) {
         <Boton tipo="submit" deshabilitado={enviando}>
           {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
         </Boton>
+
+        <div className="formulario__enlaces">
+          <span>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></span>
+        </div>
+        
       </form>
     </div>
   )

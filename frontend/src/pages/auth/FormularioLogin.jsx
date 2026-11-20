@@ -5,6 +5,7 @@ import AvisoError from '../../components/AvisoError'
 import logo from '../../assets/logo.svg'
 import { validarCorreo } from './validaciones'
 import './Formulario.css'
+import { Link } from 'react-router-dom'
 
 function FormularioLogin({ onSubmit, enviando = false, errorGeneral = '' }) {
   const [correo, setCorreo] = useState('')
@@ -59,6 +60,12 @@ function FormularioLogin({ onSubmit, enviando = false, errorGeneral = '' }) {
         <Boton tipo="submit" deshabilitado={enviando}>
           {enviando ? 'Entrando...' : 'Entrar'}
         </Boton>
+
+        <div className="formulario__enlaces">
+          <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
+          <Link to="/registro">¿No tienes cuenta? Regístrate</Link>
+        </div>
+        
       </form>
     </div>
   )

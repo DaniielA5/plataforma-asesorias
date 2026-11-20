@@ -52,4 +52,18 @@
   color: var(--color-texto);
 }
 
+/*para navegar entre pantallas*/
+.formulario__enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-base);
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario);
+}
+
+.formulario__enlaces a {
+  color: var(--color-acento);
+  text-decoration: underline;
+}
+
 }

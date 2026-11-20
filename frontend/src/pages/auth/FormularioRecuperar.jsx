@@ -5,6 +5,7 @@ import AvisoError from '../../components/AvisoError'
 import logo from '../../assets/logo.svg'
 import { validarCorreo } from './validaciones'
 import './Formulario.css'
+import { Link } from 'react-router-dom'
 
 function FormularioRecuperar({ onSubmit, enviando = false, errorGeneral = '', mensajeExito = '' }) {
   const [correo, setCorreo] = useState('')
@@ -50,6 +51,11 @@ function FormularioRecuperar({ onSubmit, enviando = false, errorGeneral = '', me
         <Boton tipo="submit" deshabilitado={enviando}>
           {enviando ? 'Enviando...' : 'Enviar instrucciones'}
         </Boton>
+
+        <div className="formulario__enlaces">
+          <Link to="/login">Volver a iniciar sesión</Link>
+        </div>
+
       </form>
     </div>
   )
