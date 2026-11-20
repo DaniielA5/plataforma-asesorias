@@ -4,6 +4,7 @@ import RutaProtegida from './components/RutaProtegida'
 import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
+import FormularioRegistro from './pages/auth/FormularioRegistro'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
@@ -16,6 +17,7 @@ function PanelAdmin() {
 function App() {
   return (
     <Routes>
+      <Route path="/registro" element={<FormularioRegistro onSubmit={() => {}} />} />
       <Route path="/login" element={<Login />} />
       <Route
         path="/"
