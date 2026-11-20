@@ -16,6 +16,7 @@ export default function CatalogoAsesorias() {
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(false)
   const [inscribiendoId, setInscribiendoId] = useState(null)
+    const [errorInscripcion, setErrorInscripcion] = useState('')
 
   useEffect(() => {
     listarMaterias().then(setMaterias).catch(() => {})
@@ -34,13 +35,14 @@ export default function CatalogoAsesorias() {
       .finally(() => setCargando(false))
   }
 
-  async function alInscribirme(asesoriaId) {
+    async function alInscribirme(asesoriaId) {
     setInscribiendoId(asesoriaId)
+    setErrorInscripcion('')
     try {
       await inscribirse(asesoriaId)
       cargar()
     } catch (err) {
-      alert(err.response?.data?.mensaje || 'No se pudo inscribir')
+      setErrorInscripcion(err.response?.data?.mensaje || 'No se pudo inscribir')
     } finally {
       setInscribiendoId(null)
     }
@@ -75,6 +77,7 @@ export default function CatalogoAsesorias() {
   return (
     <section>
       <h1>Catálogo de asesorías</h1>
+      {errorInscripcion && <AvisoError mensaje={errorInscripcion} />}
 
       <label htmlFor="filtro-materia">Materia</label>
       <select
