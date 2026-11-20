@@ -6,6 +6,7 @@ import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import FormularioRegistro from './pages/auth/FormularioRegistro'
 import FormularioRecuperar from './pages/auth/FormularioRecuperar'
+import Layout from './layout/Layout'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
@@ -15,60 +16,56 @@ function PanelAdmin() {
   return <h1>Panel de administración</h1>
 }
 
+// TODO: la pantalla real de perfil se hace en la tarea 22
+function Perfil() {
+  return <h1>Mi perfil</h1>
+}
+
 function App() {
   return (
     <Routes>
-
-       {/* TODO: conectar onSubmit con POST /api/auth/registro*/}
+      <Route path="/login" element={<Login />} />
+      {/* TODO: conectar onSubmit con POST /api/auth/registro (lo hace Daniel) */}
       <Route path="/registro" element={<FormularioRegistro onSubmit={() => {}} />} />
-        {/* TODO: conectar onSubmit con el endpoint de recuperar contraseña*/}
+      {/* TODO: conectar onSubmit con el endpoint de recuperar contraseña (lo hace Daniel) */}
       <Route path="/recuperar" element={<FormularioRecuperar onSubmit={() => {}} />} />
 
-
-      <Route path="/login" element={<Login />} />
       <Route
-        path="/"
         element={
           <RutaProtegida>
-            <Inicio />
+            <Layout />
           </RutaProtegida>
         }
-      />
-      <Route
-        path="/admin"
-        element={
-          <RutaProtegida rolesPermitidos={['ADMIN']}>
-            <PanelAdmin />
-          </RutaProtegida>
-        }
-        
-      />
+      >
+        <Route path="/" element={<Inicio />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/asesorias" element={<CatalogoAsesorias />} />
         <Route
-        path="/asesorias"
-        element={
-          <RutaProtegida>
-            <CatalogoAsesorias />
-          </RutaProtegida>
-        }
-      />
-            <Route
-        path="/mis-asesorias"
-        element={
-          <RutaProtegida rolesPermitidos={['ALUMNO']}>
-            <MisAsesorias />
-          </RutaProtegida>
-        }
-      />
-      <Route
-        path="/panel-profesor"
-        element={
-          <RutaProtegida rolesPermitidos={['PROFESOR']}>
-            <PanelProfesor />
-          </RutaProtegida>
-        }
-      />
+          path="/admin"
+          element={
+            <RutaProtegida rolesPermitidos={['ADMIN']}>
+              <PanelAdmin />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/mis-asesorias"
+          element={
+            <RutaProtegida rolesPermitidos={['ALUMNO']}>
+              <MisAsesorias />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/panel-profesor"
+          element={
+            <RutaProtegida rolesPermitidos={['PROFESOR']}>
+              <PanelProfesor />
+            </RutaProtegida>
+          }
+        />
+      </Route>
     </Routes>
-    
   )
 }
 
