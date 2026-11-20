@@ -66,3 +66,53 @@
   font-size: 0.8rem;
   color: var(--color-texto-suave);
 }
+
+
+.navbar__usuario .boton {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "marca salir"
+      "perfil perfil"
+      "enlaces enlaces";
+    padding: var(--espacio-base);
+    gap: var(--espacio-base);
+  }
+
+  .navbar__marca {
+    grid-area: marca;
+  }
+
+  .navbar__usuario {
+    display: contents;
+  }
+
+  .navbar__usuario .boton {
+    grid-area: salir;
+  }
+
+  .navbar__perfil {
+    grid-area: perfil;
+    min-width: 0;
+  }
+
+  .navbar__datos {
+    min-width: 0;
+  }
+
+  .navbar__nombre,
+  .navbar__correo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .navbar__enlaces {
+    grid-area: enlaces;
+  }
+}
