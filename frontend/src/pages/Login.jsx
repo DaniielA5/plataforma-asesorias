@@ -1,32 +1,26 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import FormularioLogin from './auth/FormularioLogin'
 
 export default function Login() {
-  const [correo, setCorreo] = useState('')
-  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [enviando, setEnviando] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  async function enviar(e) {
-    e.preventDefault()
+  async function enviar({ correo, password }) {
     setError('')
+    setEnviando(true)
     try {
       await login(correo, password)
       navigate('/')
     } catch {
       setError('Correo o contraseña incorrectos')
+    } finally {
+      setEnviando(false)
     }
   }
 
-  return (
-    <form onSubmit={enviar}>
-      <h1>Iniciar sesión</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
-      <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Entrar</button>
-    </form>
-  )
+  return <FormularioLogin onSubmit={enviar} enviando={enviando} errorGeneral={error} />
 }
