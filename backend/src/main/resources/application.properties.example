@@ -27,3 +27,6 @@ server.port=8080
 spring.mail.host=localhost
 spring.mail.port=25
 app.correo.remitente=no-reply@mg.juarez.top
+
+# ===== Frontend (para los enlaces de los correos) =====
+app.frontend.url=http://localhost:5173
