@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -26,5 +31,12 @@ public class UsuarioController {
             @RequestParam(required = false) String q,
             @PageableDefault(size = 10, sort = "nombre") Pageable pageable) {
         return usuarios.listar(rol, q, pageable);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
+    public UsuarioAdminResponse crearProfesor(@Valid @RequestBody ProfesorRequest peticion) {
+        return usuarios.crearProfesor(peticion);
     }
 }
