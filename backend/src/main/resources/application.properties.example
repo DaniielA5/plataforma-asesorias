@@ -30,3 +30,12 @@ app.correo.remitente=no-reply@mg.juarez.top
 
 # ===== Frontend (para los enlaces de los correos) =====
 app.frontend.url=http://localhost:5173
+
+
+# ===== Twilio (SMS y WhatsApp) =====
+# Con habilitado=false se usa NotificacionSimulada, que solo escribe en el log.
+app.twilio.habilitado=false
+app.twilio.account-sid=
+app.twilio.auth-token=
+app.twilio.numero-sms=
+app.twilio.numero-whatsapp=
