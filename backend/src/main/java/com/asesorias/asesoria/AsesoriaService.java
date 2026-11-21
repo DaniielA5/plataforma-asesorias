@@ -17,7 +17,6 @@ import com.asesorias.inscripcion.Inscripcion;
 import com.asesorias.notificacion.NotificacionService;
 
 import java.util.List;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
