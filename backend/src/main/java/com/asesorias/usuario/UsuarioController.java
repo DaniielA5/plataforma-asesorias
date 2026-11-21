@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -47,5 +50,17 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ADMIN')")
     public UsuarioAdminResponse editar(@PathVariable Long id, @Valid @RequestBody EdicionUsuarioRequest peticion) {
         return usuarios.editar(id, peticion);
+    }
+
+    @PatchMapping("/{id}/desactivar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UsuarioAdminResponse desactivar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        return usuarios.cambiarEstado(id, false, Long.valueOf(jwt.getSubject()));
+    }
+
+    @PatchMapping("/{id}/activar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UsuarioAdminResponse activar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        return usuarios.cambiarEstado(id, true, Long.valueOf(jwt.getSubject()));
     }
 }

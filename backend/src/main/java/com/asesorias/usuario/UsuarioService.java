@@ -60,4 +60,18 @@ public class UsuarioService {
         usuario.setTelefono(peticion.telefono());
         return UsuarioAdminResponse.de(usuarios.save(usuario));
     }
+
+
+        @Transactional
+    public UsuarioAdminResponse cambiarEstado(Long id, boolean activo, Long adminId) {
+        Usuario usuario = usuarios.findConRolById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El usuario " + id + " no existe"));
+
+        if (!activo && usuario.getId().equals(adminId)) {
+            throw new ReglaNegocioException("No puedes desactivar tu propia cuenta");
+        }
+
+        usuario.setActivo(activo);
+        return UsuarioAdminResponse.de(usuarios.save(usuario));
+    }
 }
