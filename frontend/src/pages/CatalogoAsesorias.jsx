@@ -6,6 +6,7 @@ import Tabla from '../components/Tabla'
 import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
+import Select from '../components/Select'
 
 export default function CatalogoAsesorias() {
   const { usuario } = useAuth()
@@ -16,6 +17,7 @@ export default function CatalogoAsesorias() {
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(false)
   const [inscribiendoId, setInscribiendoId] = useState(null)
+    const [errorInscripcion, setErrorInscripcion] = useState('')
 
   useEffect(() => {
     listarMaterias().then(setMaterias).catch(() => {})
@@ -34,13 +36,14 @@ export default function CatalogoAsesorias() {
       .finally(() => setCargando(false))
   }
 
-  async function alInscribirme(asesoriaId) {
+    async function alInscribirme(asesoriaId) {
     setInscribiendoId(asesoriaId)
+    setErrorInscripcion('')
     try {
       await inscribirse(asesoriaId)
       cargar()
     } catch (err) {
-      alert(err.response?.data?.mensaje || 'No se pudo inscribir')
+      setErrorInscripcion(err.response?.data?.mensaje || 'No se pudo inscribir')
     } finally {
       setInscribiendoId(null)
     }
@@ -75,21 +78,19 @@ export default function CatalogoAsesorias() {
   return (
     <section>
       <h1>Catálogo de asesorías</h1>
+      {errorInscripcion && <AvisoError mensaje={errorInscripcion} />}
 
-      <label htmlFor="filtro-materia">Materia</label>
-      <select
+            <Select
         id="filtro-materia"
-        value={materiaId}
+        etiqueta="Materia"
+        valor={materiaId}
         onChange={(e) => {
           setPage(0)
           setMateriaId(e.target.value)
         }}
-      >
-        <option value="">Todas</option>
-        {materias.map((m) => (
-          <option key={m.id} value={m.id}>{m.nombre}</option>
-        ))}
-      </select>
+        opcionVacia="Todas"
+        opciones={materias.map((m) => ({ valor: m.id, texto: m.nombre }))}
+      />
 
       {cargando && <Spinner mensaje="Cargando asesorías..." />}
       {!cargando && error && <AvisoError onReintentar={cargar} />}

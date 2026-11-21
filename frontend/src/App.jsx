@@ -7,6 +7,7 @@ import RutaProtegida from './components/RutaProtegida'
 import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
+import Layout from './layout/Layout'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
@@ -16,6 +17,11 @@ function PanelAdmin() {
   return <h1>Panel de administración</h1>
 }
 
+// TODO: la pantalla real de perfil se hace en la tarea 22
+function Perfil() {
+  return <h1>Mi perfil</h1>
+}
+
 function App() {
   return (
     <Routes>
@@ -23,46 +29,42 @@ function App() {
       <Route path="/registro" element={<Registro />} />
       <Route path="/recuperar" element={<Recuperar />} />
       <Route path="/restablecer" element={<Restablecer />} />
+
       <Route
-        path="/"
         element={
           <RutaProtegida>
-            <Inicio />
+            <Layout />
           </RutaProtegida>
         }
-      />
-      <Route
-        path="/admin"
-        element={
-          <RutaProtegida rolesPermitidos={['ADMIN']}>
-            <PanelAdmin />
-          </RutaProtegida>
-        }
-      />
-      <Route
-        path="/asesorias"
-        element={
-          <RutaProtegida>
-            <CatalogoAsesorias />
-          </RutaProtegida>
-        }
-      />
-      <Route
-        path="/mis-asesorias"
-        element={
-          <RutaProtegida rolesPermitidos={['ALUMNO']}>
-            <MisAsesorias />
-          </RutaProtegida>
-        }
-      />
-      <Route
-        path="/panel-profesor"
-        element={
-          <RutaProtegida rolesPermitidos={['PROFESOR']}>
-            <PanelProfesor />
-          </RutaProtegida>
-        }
-      />
+      >
+        <Route path="/" element={<Inicio />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/asesorias" element={<CatalogoAsesorias />} />
+        <Route
+          path="/admin"
+          element={
+            <RutaProtegida rolesPermitidos={['ADMIN']}>
+              <PanelAdmin />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/mis-asesorias"
+          element={
+            <RutaProtegida rolesPermitidos={['ALUMNO']}>
+              <MisAsesorias />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/panel-profesor"
+          element={
+            <RutaProtegida rolesPermitidos={['PROFESOR']}>
+              <PanelProfesor />
+            </RutaProtegida>
+          }
+        />
+      </Route>
     </Routes>
   )
 }

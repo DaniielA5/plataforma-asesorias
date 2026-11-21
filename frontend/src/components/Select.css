@@ -1,0 +1,26 @@
+.select-campo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espacio-base) / 2);
+  max-width: 320px;
+  margin: var(--espacio-base) 0 var(--espacio-seccion);
+}
+
+.select-campo__etiqueta {
+  color: var(--color-texto);
+  font-size: 0.9rem;
+}
+
+.select-campo__select {
+  padding: var(--espacio-base) calc(var(--espacio-base) * 1.5);
+  background: var(--color-superficie-2);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-control);
+  color: var(--color-texto);
+  font-size: 1rem;
+}
+
+.select-campo__select:focus {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 1px;
+}
