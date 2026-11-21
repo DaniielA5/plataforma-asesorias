@@ -18,6 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpec
     Optional<Usuario> findConRolById(Long id);
 
     boolean existsByCorreo(String correo);
+    boolean existsByCorreoAndIdNot(String correo, Long id);
 
     @Override
     @EntityGraph(attributePaths = "rol")

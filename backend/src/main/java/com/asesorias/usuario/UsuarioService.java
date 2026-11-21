@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.asesorias.error.ReglaNegocioException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.asesorias.error.RecursoNoEncontradoException;
 
 @Service
 public class UsuarioService {
@@ -41,5 +42,22 @@ public class UsuarioService {
         profesor.setTelefono(peticion.telefono());
         profesor.setRol(roles.findByNombre(NombreRol.PROFESOR).orElseThrow());
         return UsuarioAdminResponse.de(usuarios.save(profesor));
+    }
+
+
+        @Transactional
+    public UsuarioAdminResponse editar(Long id, EdicionUsuarioRequest peticion) {
+        Usuario usuario = usuarios.findConRolById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El usuario " + id + " no existe"));
+
+        String correo = peticion.correo().trim().toLowerCase();
+        if (usuarios.existsByCorreoAndIdNot(correo, id)) {
+            throw new ReglaNegocioException("Ese correo ya lo usa otro usuario");
+        }
+
+        usuario.setNombre(peticion.nombre().trim());
+        usuario.setCorreo(correo);
+        usuario.setTelefono(peticion.telefono());
+        return UsuarioAdminResponse.de(usuarios.save(usuario));
     }
 }
