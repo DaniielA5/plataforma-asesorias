@@ -35,8 +35,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST, "/api/auth/registro", "/api/auth/login").permitAll()
-                .requestMatchers("/api/**").authenticated()
+            .requestMatchers(HttpMethod.POST, "/api/auth/registro", "/api/auth/login", "/api/auth/recuperar", "/api/auth/restablecer").permitAll()                .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll())
             .oauth2ResourceServer(rs -> rs
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(convertidorDeRoles()))

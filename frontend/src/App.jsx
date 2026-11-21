@@ -1,11 +1,12 @@
 import { Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
+import Registro from './pages/Registro'
+import Recuperar from './pages/Recuperar'
+import Restablecer from './pages/Restablecer'
 import RutaProtegida from './components/RutaProtegida'
 import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
-import FormularioRegistro from './pages/auth/FormularioRegistro'
-import FormularioRecuperar from './pages/auth/FormularioRecuperar'
 import Layout from './layout/Layout'
 
 function Inicio() {
@@ -25,10 +26,9 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      {/* TODO: conectar onSubmit con POST /api/auth/registro (lo hace Daniel) */}
-      <Route path="/registro" element={<FormularioRegistro onSubmit={() => {}} />} />
-      {/* TODO: conectar onSubmit con el endpoint de recuperar contraseña (lo hace Daniel) */}
-      <Route path="/recuperar" element={<FormularioRecuperar onSubmit={() => {}} />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="/recuperar" element={<Recuperar />} />
+      <Route path="/restablecer" element={<Restablecer />} />
 
       <Route
         element={
