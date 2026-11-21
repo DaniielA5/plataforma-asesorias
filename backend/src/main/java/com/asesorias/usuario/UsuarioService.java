@@ -74,4 +74,23 @@ public class UsuarioService {
         usuario.setActivo(activo);
         return UsuarioAdminResponse.de(usuarios.save(usuario));
     }
+
+
+        @Transactional(readOnly = true)
+    public UsuarioAdminResponse miPerfil(Long id) {
+        return UsuarioAdminResponse.de(buscar(id));
+    }
+
+    @Transactional
+    public UsuarioAdminResponse editarMiPerfil(Long id, PerfilRequest peticion) {
+        Usuario usuario = buscar(id);
+        usuario.setNombre(peticion.nombre().trim());
+        usuario.setTelefono(peticion.telefono());
+        return UsuarioAdminResponse.de(usuarios.save(usuario));
+    }
+
+    private Usuario buscar(Long id) {
+        return usuarios.findConRolById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El usuario " + id + " no existe"));
+    }
 }

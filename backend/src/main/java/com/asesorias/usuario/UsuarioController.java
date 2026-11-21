@@ -46,6 +46,18 @@ public class UsuarioController {
     }
 
 
+    @GetMapping("/me")
+    public UsuarioAdminResponse miPerfil(@AuthenticationPrincipal Jwt jwt) {
+        return usuarios.miPerfil(Long.valueOf(jwt.getSubject()));
+    }
+
+    @PutMapping("/me")
+    public UsuarioAdminResponse editarMiPerfil(@AuthenticationPrincipal Jwt jwt,
+                                               @Valid @RequestBody PerfilRequest peticion) {
+        return usuarios.editarMiPerfil(Long.valueOf(jwt.getSubject()), peticion);
+    }
+
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public UsuarioAdminResponse editar(@PathVariable Long id, @Valid @RequestBody EdicionUsuarioRequest peticion) {
