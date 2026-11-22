@@ -8,16 +8,11 @@ import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
-
 import Inicio from './pages/Inicio'
+import Perfil from './pages/Perfil'
 
 function PanelAdmin() {
   return <h1>Panel de administración</h1>
-}
-
-// TODO: la pantalla real de perfil se hace en la tarea 22
-function Perfil() {
-  return <h1>Mi perfil</h1>
 }
 
 function App() {
