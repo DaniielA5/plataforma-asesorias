@@ -10,6 +10,7 @@ import FormularioUsuario from './FormularioUsuario'
 import { useListado } from './useListado'
 import { cambiarEstadoUsuario, crearProfesor, editarUsuario, listarUsuarios } from './adminApi'
 import { mensajeError } from '../../utils/errores'
+import { useAuth } from '../../context/AuthContext'
 import './Admin.css'
 
 const ROLES = [
@@ -19,6 +20,8 @@ const ROLES = [
 ]
 
 export default function UsuariosAdmin() {
+  const { usuario: yo } = useAuth()
+
   const [rol, setRol] = useState('')
   const [busqueda, setBusqueda] = useState('')
   const [q, setQ] = useState('')
@@ -100,9 +103,11 @@ export default function UsuariosAdmin() {
           <Boton variante="secundario" onClick={() => abrirFormulario({ modo: 'editar', usuario: u })}>
             Editar
           </Boton>
-          <Boton variante="secundario" onClick={() => setAConfirmar(u)}>
-            {u.activo ? 'Desactivar' : 'Activar'}
-          </Boton>
+          {u.id !== yo?.id && (
+            <Boton variante="secundario" onClick={() => setAConfirmar(u)}>
+              {u.activo ? 'Desactivar' : 'Activar'}
+            </Boton>
+          )}
         </div>
       ),
     },
