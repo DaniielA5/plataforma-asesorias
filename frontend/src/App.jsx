@@ -9,9 +9,7 @@ import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
 
-function Inicio() {
-  return <h1>Plataforma de Asesorías</h1>
-}
+import Inicio from './pages/Inicio'
 
 function PanelAdmin() {
   return <h1>Panel de administración</h1>
