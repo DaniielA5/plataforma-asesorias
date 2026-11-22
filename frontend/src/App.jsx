@@ -8,13 +8,10 @@ import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
+import AdminLayout from './pages/admin/AdminLayout'
 
 function Inicio() {
   return <h1>Plataforma de Asesorías</h1>
-}
-
-function PanelAdmin() {
-  return <h1>Panel de administración</h1>
 }
 
 // TODO: la pantalla real de perfil se hace en la tarea 22
@@ -44,7 +41,7 @@ function App() {
           path="/admin"
           element={
             <RutaProtegida rolesPermitidos={['ADMIN']}>
-              <PanelAdmin />
+              <AdminLayout />
             </RutaProtegida>
           }
         />
