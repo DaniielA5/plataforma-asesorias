@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Recuperar from './pages/Recuperar'
@@ -8,12 +8,12 @@ import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
+import AdminLayout from './pages/admin/AdminLayout'
+import UsuariosAdmin from './pages/admin/UsuariosAdmin'
+import MateriasAdmin from './pages/admin/MateriasAdmin'
+import NotificacionesAdmin from './pages/admin/NotificacionesAdmin'
+import Perfil from './pages/perfil/Perfil'
 import Inicio from './pages/Inicio'
-import Perfil from './pages/Perfil'
-
-function PanelAdmin() {
-  return <h1>Panel de administración</h1>
-}
 
 function App() {
   return (
@@ -37,10 +37,15 @@ function App() {
           path="/admin"
           element={
             <RutaProtegida rolesPermitidos={['ADMIN']}>
-              <PanelAdmin />
+              <AdminLayout />
             </RutaProtegida>
           }
-        />
+        >
+          <Route index element={<Navigate to="usuarios" replace />} />
+          <Route path="usuarios" element={<UsuariosAdmin />} />
+          <Route path="materias" element={<MateriasAdmin />} />
+          <Route path="notificaciones" element={<NotificacionesAdmin />} />
+        </Route>
         <Route
           path="/mis-asesorias"
           element={
