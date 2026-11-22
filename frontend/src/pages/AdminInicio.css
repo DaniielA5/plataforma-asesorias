@@ -1,0 +1,104 @@
+.admin-inicio {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--espacio-pagina);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-seccion);
+}
+
+.admin-inicio__titulo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.admin-inicio__subtitulo {
+  color: var(--color-texto-secundario);
+  margin: 4px 0 0;
+}
+
+.admin-inicio__acciones {
+  display: flex;
+  gap: var(--espacio-base);
+}
+
+.admin-inicio__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--espacio-base);
+}
+
+.admin-inicio__stat {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  padding: var(--espacio-seccion);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-inicio__stat-numero {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+}
+
+.admin-inicio__stat-etiqueta {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.admin-inicio__columnas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--espacio-seccion);
+}
+
+.admin-inicio__panel {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  padding: var(--espacio-seccion);
+}
+
+.admin-inicio__panel h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  margin: 0 0 var(--espacio-base);
+}
+
+.admin-inicio__agenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-inicio__agenda-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.admin-inicio__agenda-fecha {
+  font-size: 0.8rem;
+  color: var(--color-acento);
+  font-weight: 600;
+}
+
+.admin-inicio__agenda--cancelada .admin-inicio__agenda-fecha {
+  color: var(--color-error);
+}
+
+.admin-inicio__agenda-detalle {
+  color: var(--color-texto);
+}
+
+.admin-inicio__vacio {
+  color: var(--color-texto-suave);
+  font-style: italic;
+}

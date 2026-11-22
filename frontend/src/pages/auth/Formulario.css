@@ -19,8 +19,8 @@
 }
 
 .formulario__logo {
-  height: 40px;
-  align-self: flex-start;
+  height: 64px;
+  align-self: center;
 }
 
 .formulario__titulo {
@@ -28,17 +28,7 @@
   color: var(--color-primario);
 }
 
-@media (max-width: 480px) {
-  .formulario-pagina {
-    padding: var(--espacio-base);
-  }
-
-  .formulario {
-    padding: var(--espacio-seccion);
-  }
-
-
-  .formulario__texto {
+.formulario__texto {
   margin: 0;
   color: var(--color-texto-secundario);
 }
@@ -63,7 +53,20 @@
 
 .formulario__enlaces a {
   color: var(--color-acento);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.formulario__enlaces a:hover {
   text-decoration: underline;
 }
 
+@media (max-width: 480px) {
+  .formulario-pagina {
+    padding: var(--espacio-base);
+  }
+
+  .formulario {
+    padding: var(--espacio-seccion);
+  }
 }

@@ -1,9 +1,9 @@
 import api from "./axios";
 
-export function listarAsesorias({ materiaId, page =0} = {} ){
-    return api.get('/asesorias', {params: {materiaId: materiaId || undefined, page}
-    })
-        .then((res) => res.data)
+export function listarAsesorias({ materiaId, estado, page = 0, size } = {}) {
+  return api.get('/asesorias', {
+    params: { materiaId: materiaId || undefined, estado: estado || undefined, page, size: size || undefined },
+  }).then((res) => res.data)
 }
 
 export function inscribirse(asesoriaId) {

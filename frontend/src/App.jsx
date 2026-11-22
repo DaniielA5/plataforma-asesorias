@@ -10,10 +10,8 @@ import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
 import Inicio from './pages/Inicio'
 import Perfil from './pages/Perfil'
-
-function PanelAdmin() {
-  return <h1>Panel de administración</h1>
-}
+import AdminUsuarios from './pages/AdminUsuarios'
+ 
 
 function App() {
   return (
@@ -37,7 +35,7 @@ function App() {
           path="/admin"
           element={
             <RutaProtegida rolesPermitidos={['ADMIN']}>
-              <PanelAdmin />
+              <AdminUsuarios />
             </RutaProtegida>
           }
         />

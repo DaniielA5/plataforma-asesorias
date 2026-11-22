@@ -7,6 +7,7 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import './Inicio.css'
+import AdminInicio from './AdminInicio'
 
 function saludo() {
   const hora = new Date().getHours()
@@ -26,6 +27,9 @@ export default function Inicio() {
       .then(setInscripciones)
       .catch(() => setError(true))
   }, [usuario])
+  if (usuario?.rol === 'ADMIN') {
+    return <AdminInicio />
+  }
 
   if (usuario?.rol !== 'ALUMNO') {
     return (
