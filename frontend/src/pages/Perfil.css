@@ -1,0 +1,48 @@
+.perfil {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: var(--espacio-pagina);
+}
+
+.perfil__titulo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.75rem;
+  margin-bottom: var(--espacio-seccion);
+}
+
+.perfil__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-base);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  padding: var(--espacio-seccion);
+}
+
+.perfil__campo-fijo {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-texto-secundario);
+}
+
+.perfil__etiqueta-fija {
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.perfil__insignia {
+  background: var(--color-secundario-suave);
+  padding: 2px 10px;
+  border-radius: var(--radio-pastilla);
+  font-size: 0.85rem;
+}
+
+.perfil__exito {
+  color: var(--color-exito-texto);
+  background: var(--color-secundario-suave);
+  padding: 8px 12px;
+  border-radius: var(--radio-control);
+}

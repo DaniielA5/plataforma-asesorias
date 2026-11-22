@@ -13,10 +13,7 @@ import UsuariosAdmin from './pages/admin/UsuariosAdmin'
 import MateriasAdmin from './pages/admin/MateriasAdmin'
 import NotificacionesAdmin from './pages/admin/NotificacionesAdmin'
 import Perfil from './pages/perfil/Perfil'
-
-function Inicio() {
-  return <h1>Plataforma de Asesorías</h1>
-}
+import Inicio from './pages/Inicio'
 
 function App() {
   return (

@@ -1,0 +1,90 @@
+.inicio {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--espacio-pagina);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-seccion);
+}
+
+.inicio__titulo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  margin: 0;
+  color: var(--color-texto);
+}
+
+.inicio__subtitulo {
+  color: var(--color-texto-secundario);
+  margin: 4px 0 0;
+}
+
+.inicio__destacada {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-tarjeta);
+  padding: var(--espacio-seccion);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inicio__etiqueta {
+  display: inline-block;
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radio-pastilla);
+  width: fit-content;
+}
+
+.inicio__destacada-titulo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  margin: 8px 0 0;
+}
+
+.inicio__destacada-detalle,
+.inicio__destacada-profesor {
+  margin: 0;
+  opacity: 0.85;
+}
+
+.inicio__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--espacio-base);
+}
+
+.inicio__stat {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-tarjeta);
+  padding: var(--espacio-seccion);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inicio__stat-numero {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+}
+
+.inicio__stat-etiqueta {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.inicio__tabla h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+}
+
+.inicio__enlace-catalogo {
+  color: var(--color-acento);
+  font-weight: 600;
+  text-decoration: none;
+}
