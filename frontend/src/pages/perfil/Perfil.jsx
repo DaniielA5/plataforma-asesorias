@@ -8,8 +8,9 @@ import { validarNombre, validarTelefono } from '../auth/validaciones'
 import { miPerfil, editarMiPerfil } from './perfilApi'
 import { mensajeError } from '../../utils/errores'
 import '../admin/Admin.css'
-
+import { useAuth } from '../../context/AuthContext'
 export default function Perfil() {
+  const { actualizarUsuario } = useAuth()
   const [perfil, setPerfil] = useState(null)
   const [datos, setDatos] = useState({ nombre: '', telefono: '' })
   const [cargando, setCargando] = useState(true)
@@ -55,6 +56,7 @@ export default function Perfil() {
     try {
       const actualizado = await editarMiPerfil({ nombre: datos.nombre.trim(), telefono: datos.telefono.trim() })
       setPerfil(actualizado)
+      actualizarUsuario(actualizado)
       setExito('Perfil actualizado')
     } catch (err) {
       setErrorGeneral(mensajeError(err))
