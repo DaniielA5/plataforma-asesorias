@@ -10,6 +10,7 @@ import { mensajeError } from '../../utils/errores'
 import '../admin/Admin.css'
 import { useAuth } from '../../context/AuthContext'
 export default function Perfil() {
+  const { actualizarUsuario } = useAuth()
   const [perfil, setPerfil] = useState(null)
   const [datos, setDatos] = useState({ nombre: '', telefono: '' })
   const [cargando, setCargando] = useState(true)
