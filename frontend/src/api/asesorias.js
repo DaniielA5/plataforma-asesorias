@@ -19,8 +19,8 @@ export function cancelarInscripcion(asesoriaId) {
   return api.delete(`/asesorias/${asesoriaId}/inscripciones`)
 }
 
-export function misAsesoriasProfesor(page = 0) {
-  return api.get('/asesorias/mias', { params: { page } }).then((res) => res.data)
+export function misAsesoriasProfesor(page = 0, size) {
+  return api.get('/asesorias/mias', { params: { page, size: size || undefined } }).then((res) => res.data)
 }
 
 export function verInscritos(asesoriaId) {

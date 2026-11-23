@@ -9,6 +9,7 @@ import Boton from '../components/Boton'
 import './Inicio.css'
 import AdminInicio from './AdminInicio'
 import EstadoVacio from '../components/EstadoVacio'
+import ProfesorInicio from './ProfesorInicio'
 
 function saludo() {
   const hora = new Date().getHours()
@@ -30,6 +31,9 @@ export default function Inicio() {
   }, [usuario])
   if (usuario?.rol === 'ADMIN') {
     return <AdminInicio />
+  }
+  if (usuario?.rol === 'PROFESOR') {
+    return <ProfesorInicio />
   }
 
   if (usuario?.rol !== 'ALUMNO') {
