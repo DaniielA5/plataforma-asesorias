@@ -8,6 +8,7 @@ import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import './Inicio.css'
 import AdminInicio from './AdminInicio'
+import EstadoVacio from '../components/EstadoVacio'
 
 function saludo() {
   const hora = new Date().getHours()
@@ -107,7 +108,7 @@ export default function Inicio() {
           page={0}
           totalPages={1}
           onPageChange={() => {}}
-          mensajeVacio="Todavía no tienes asesorías próximas. Ve al catálogo para inscribirte."
+          mensajeVacio={<EstadoVacio icono="🗓️" titulo="No tienes asesorías próximas" textoAccion="Ver catálogo" rutaAccion="/asesorias" />}
         />
       </div>
 

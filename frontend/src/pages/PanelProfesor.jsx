@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
+import EstadoVacio from '../components/EstadoVacio'
 
 export default function PanelProfesor() {
   const [pagina, setPagina] = useState(null)
@@ -86,7 +87,7 @@ export default function PanelProfesor() {
           page={pagina.page}
           totalPages={pagina.totalPages}
           onPageChange={setPage}
-          mensajeVacio="Todavía no has creado ninguna asesoría."
+          mensajeVacio={<EstadoVacio icono="🗓️" titulo="Todavía no has creado ninguna asesoría" mensaje="Cuando publiques tu primera asesoría, aparecerá aquí." />}
         />
       )}
 

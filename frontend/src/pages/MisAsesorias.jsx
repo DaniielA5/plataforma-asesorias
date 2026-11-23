@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
+import EstadoVacio from '../components/EstadoVacio'
 
 export default function MisAsesorias() {
   const [inscripciones, setInscripciones] = useState([])
@@ -67,7 +68,7 @@ export default function MisAsesorias() {
           page={0}
           totalPages={1}
           onPageChange={() => {}}
-          mensajeVacio="Todavía no te has inscrito a ninguna asesoría."
+          mensajeVacio={<EstadoVacio icono="📚" titulo="Todavía no te has inscrito a ninguna asesoría" textoAccion="Ver catálogo" rutaAccion="/asesorias" />}
         />
       )}
 

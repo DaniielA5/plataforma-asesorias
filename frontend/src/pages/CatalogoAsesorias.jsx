@@ -7,6 +7,7 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Select from '../components/Select'
+import EstadoVacio from '../components/EstadoVacio'
 
 export default function CatalogoAsesorias() {
   const { usuario } = useAuth()
@@ -50,7 +51,15 @@ export default function CatalogoAsesorias() {
   }
 
   const columnas = [
-    { clave: 'materiaNombre', titulo: 'Materia' },
+    {
+      clave: 'materiaNombre',
+      titulo: 'Materia',
+      render: (fila) => (
+        <span className={`catalogo__materia catalogo__materia--${fila.materiaId % 2 === 0 ? 'gris' : 'amarillo'}`}>
+          {fila.materiaNombre}
+        </span>
+      ),
+    },
     { clave: 'profesorNombre', titulo: 'Profesor' },
     { clave: 'fecha', titulo: 'Fecha' },
     { clave: 'hora', titulo: 'Hora' },
@@ -101,7 +110,7 @@ export default function CatalogoAsesorias() {
           page={pagina.page}
           totalPages={pagina.totalPages}
           onPageChange={setPage}
-          mensajeVacio="No hay asesorías con ese filtro."
+          mensajeVacio={<EstadoVacio icono="📭" titulo="No hay asesorías con ese filtro" mensaje="Prueba con otra materia o quita el filtro." />}
         />
       )}
     </section>
