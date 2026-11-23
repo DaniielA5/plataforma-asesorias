@@ -7,9 +7,12 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Select from '../components/Select'
+import EstadoVacio from '../components/EstadoVacio'
+import { useToast } from '../context/ToastContext'
 
 export default function CatalogoAsesorias() {
   const { usuario } = useAuth()
+  const { mostrarToast } = useToast() 
   const [materias, setMaterias] = useState([])
   const [materiaId, setMateriaId] = useState('')
   const [pagina, setPagina] = useState(null)
@@ -41,6 +44,7 @@ export default function CatalogoAsesorias() {
     setErrorInscripcion('')
     try {
       await inscribirse(asesoriaId)
+      mostrarToast('Te inscribiste correctamente')
       cargar()
     } catch (err) {
       setErrorInscripcion(err.response?.data?.mensaje || 'No se pudo inscribir')
@@ -50,7 +54,15 @@ export default function CatalogoAsesorias() {
   }
 
   const columnas = [
-    { clave: 'materiaNombre', titulo: 'Materia' },
+    {
+      clave: 'materiaNombre',
+      titulo: 'Materia',
+      render: (fila) => (
+        <span className={`catalogo__materia catalogo__materia--${fila.materiaId % 2 === 0 ? 'gris' : 'amarillo'}`}>
+          {fila.materiaNombre}
+        </span>
+      ),
+    },
     { clave: 'profesorNombre', titulo: 'Profesor' },
     { clave: 'fecha', titulo: 'Fecha' },
     { clave: 'hora', titulo: 'Hora' },
@@ -101,7 +113,7 @@ export default function CatalogoAsesorias() {
           page={pagina.page}
           totalPages={pagina.totalPages}
           onPageChange={setPage}
-          mensajeVacio="No hay asesorías con ese filtro."
+          mensajeVacio={<EstadoVacio icono="📭" titulo="No hay asesorías con ese filtro" mensaje="Prueba con otra materia o quita el filtro." />}
         />
       )}
     </section>

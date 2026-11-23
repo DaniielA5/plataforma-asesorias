@@ -6,11 +6,14 @@ import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
+import EstadoVacio from '../components/EstadoVacio'
 import FormularioAsesoria from './FormularioAsesoria'
+import { useToast } from '../context/ToastContext'
 import { mensajeError } from '../utils/errores'
 import './admin/Admin.css'
 
 export default function PanelProfesor() {
+  const { mostrarToast } = useToast()
   const [pagina, setPagina] = useState(null)
   const [page, setPage] = useState(0)
   const [cargando, setCargando] = useState(true)
@@ -26,7 +29,6 @@ export default function PanelProfesor() {
   const [formulario, setFormulario] = useState(null)
   const [guardando, setGuardando] = useState(false)
   const [errorFormulario, setErrorFormulario] = useState('')
-  const [aviso, setAviso] = useState('')
   const [errorAccion, setErrorAccion] = useState('')
 
   useEffect(() => {
@@ -47,7 +49,6 @@ export default function PanelProfesor() {
   }
 
   function abrirFormulario(nuevo) {
-    setAviso('')
     setErrorAccion('')
     setErrorFormulario('')
     setFormulario(nuevo)
@@ -59,10 +60,10 @@ export default function PanelProfesor() {
     try {
       if (formulario.asesoria) {
         await editarAsesoria(formulario.asesoria.id, cuerpo)
-        setAviso('Asesoría actualizada')
+        mostrarToast('Asesoría actualizada')
       } else {
         await crearAsesoria(cuerpo)
-        setAviso('Asesoría creada')
+        mostrarToast('Asesoría creada')
       }
       setFormulario(null)
       cargar()
@@ -85,11 +86,10 @@ export default function PanelProfesor() {
   async function confirmarCancelacion() {
     const id = porCancelar.id
     setPorCancelar(null)
-    setAviso('')
     setErrorAccion('')
     try {
       await cancelarAsesoria(id)
-      setAviso('Asesoría cancelada')
+      mostrarToast('Asesoría cancelada')
       cargar()
       if (seleccionada?.id === id) setSeleccionada(null)
     } catch (err) {
@@ -128,7 +128,6 @@ export default function PanelProfesor() {
         <Boton onClick={() => abrirFormulario({})}>Crear asesoría</Boton>
       </div>
 
-      {aviso && <p className="admin__aviso" role="status">{aviso}</p>}
       {errorAccion && <AvisoError mensaje={errorAccion} />}
 
       {formulario && (
@@ -152,7 +151,7 @@ export default function PanelProfesor() {
           page={pagina.page}
           totalPages={pagina.totalPages}
           onPageChange={setPage}
-          mensajeVacio="Todavía no has creado ninguna asesoría."
+          mensajeVacio={<EstadoVacio icono="🗓️" titulo="Todavía no has creado ninguna asesoría" mensaje="Usa el botón Crear asesoría para publicar la primera." />}
         />
       )}
 
@@ -175,7 +174,7 @@ export default function PanelProfesor() {
       <Modal
         abierto={porCancelar !== null}
         titulo="Cancelar asesoría"
-        mensaje={porCancelar ? `¿Seguro que quieres cancelar la asesoría de ${porCancelar.materiaNombre} del ${porCancelar.fecha}? Se avisará a quienes estén inscritos.` : ''}
+        mensaje={porCancelar ? `¿Seguro que quieres cancelar la asesoría de ${porCancelar.materiaNombre} del ${porCancelar.fecha}? Se avisará por SMS a quienes estén inscritos.` : ''}
         onConfirmar={confirmarCancelacion}
         onCancelar={() => setPorCancelar(null)}
       />

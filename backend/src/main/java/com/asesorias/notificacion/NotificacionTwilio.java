@@ -32,17 +32,20 @@ public class NotificacionTwilio implements NotificacionService {
 
     @Override
     public void enviarSms(Usuario destinatario, String mensaje) {
-        enviar("SMS", destinatario, mensaje,
+        String cuerpo = (propiedades.plantillaSms() == null || propiedades.plantillaSms().isBlank())
+                ? mensaje
+                : propiedades.plantillaSms();
+        enviar("SMS", destinatario, mensaje, cuerpo,
                 destinatario.getTelefono(), propiedades.numeroSms());
     }
 
     @Override
     public void enviarWhatsapp(Usuario destinatario, String mensaje) {
-        enviar("WHATSAPP", destinatario, mensaje,
+        enviar("WHATSAPP", destinatario, mensaje, mensaje,
                 "whatsapp:" + destinatario.getTelefono(), "whatsapp:" + propiedades.numeroWhatsapp());
     }
 
-    private void enviar(String canal, Usuario destinatario, String mensaje, String para, String de) {
+    private void enviar(String canal, Usuario destinatario, String mensaje, String cuerpo, String para, String de) {
         Notificacion registro = new Notificacion();
         registro.setUsuarioId(destinatario.getId());
         registro.setCanal(canal);
@@ -53,7 +56,7 @@ public class NotificacionTwilio implements NotificacionService {
             if (destinatario.getTelefono() == null || destinatario.getTelefono().isBlank()) {
                 throw new IllegalStateException("El usuario no tiene teléfono registrado");
             }
-            Message.creator(new PhoneNumber(para), new PhoneNumber(de), mensaje).create();
+            Message.creator(new PhoneNumber(para), new PhoneNumber(de), cuerpo).create();
             registro.setEstado("ENVIADA");
         } catch (Exception e) {
             log.warn("No se pudo enviar el {} a {}: {}", canal, para, e.getMessage());
