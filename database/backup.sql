@@ -2,7 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict FvhZl0D2FXu4sSb3uLSHTujaz1ST1rDG31XIZ22Ic3pZS1utL60uzDWUctfPOep
 
 -- Dumped from database version 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
@@ -417,6 +416,21 @@ ALTER TABLE ONLY public.usuarios ALTER COLUMN id SET DEFAULT nextval('public.usu
 --
 
 COPY public.asesorias (id, profesor_id, materia_id, fecha, hora, lugar, cupo_max, estado, notas, creado_en) FROM stdin;
+1	2	1	2026-11-23	16:00:00	Aula B-204	6	ACTIVA	\N	2026-11-22 23:08:37.317375
+2	2	2	2026-11-24	10:00:00	Aula B-205	8	ACTIVA	\N	2026-11-22 23:08:37.334429
+3	2	4	2026-11-26	12:00:00	Aula B-110	5	ACTIVA	\N	2026-11-22 23:08:37.345196
+4	3	5	2026-11-23	11:00:00	Lab de química	6	ACTIVA	\N	2026-11-22 23:08:37.358161
+5	3	6	2026-11-25	13:00:00	Lab de química	4	ACTIVA	\N	2026-11-22 23:08:37.365606
+6	3	12	2026-11-27	09:00:00	Aula C-101	10	ACTIVA	\N	2026-11-22 23:08:37.373074
+7	4	2	2026-11-24	14:00:00	Aula A-12	6	ACTIVA	\N	2026-11-22 23:08:37.378923
+8	4	3	2026-11-25	16:00:00	Aula A-14	8	ACTIVA	\N	2026-11-22 23:08:37.386079
+9	4	8	2026-11-28	10:00:00	Lab de física	5	ACTIVA	\N	2026-11-22 23:08:37.393085
+10	4	9	2026-11-29	12:00:00	Lab de física	6	ACTIVA	\N	2026-11-22 23:08:37.401025
+11	5	7	2026-11-24	09:00:00	Lab de biología	7	ACTIVA	\N	2026-11-22 23:08:37.409635
+12	5	10	2026-11-26	15:00:00	Sala de cómputo 1	10	ACTIVA	\N	2026-11-22 23:08:37.41916
+13	5	11	2026-11-27	17:00:00	Sala de cómputo 2	8	ACTIVA	\N	2026-11-22 23:08:37.426439
+14	5	10	2026-11-30	11:00:00	Sala de cómputo 1	12	ACTIVA	\N	2026-11-22 23:08:37.432469
+15	3	5	2026-12-01	10:00:00	Lab de química	6	ACTIVA	\N	2026-11-22 23:08:37.440419
 \.
 
 
@@ -425,12 +439,12 @@ COPY public.asesorias (id, profesor_id, materia_id, fecha, hora, lugar, cupo_max
 --
 
 COPY public.flyway_schema_history (installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success) FROM stdin;
-1	1	crear roles y usuarios	SQL	V1__crear_roles_y_usuarios.sql	1047942275	asesorias_app	2026-11-16 02:46:47.711862	216	t
-2	2	crear materias y profesor materia	SQL	V2__crear_materias_y_profesor_materia.sql	-789521193	asesorias_app	2026-11-16 02:46:48.181299	69	t
-3	3	crear asesorias e inscripciones	SQL	V3__crear_asesorias_e_inscripciones.sql	785193787	asesorias_app	2026-11-16 02:46:48.394526	165	t
-4	4	crear tokens	SQL	V4__crear_tokens.sql	1931524805	asesorias_app	2026-11-16 02:46:48.64777	90	t
-5	5	crear notificaciones	SQL	V5__crear_notificaciones.sql	441870441	asesorias_app	2026-11-16 02:46:48.818043	61	t
-6	6	crear tokens recuperacion	SQL	V6__crear_tokens_recuperacion.sql	-1620299635	asesorias_app	2026-11-20 23:56:00.167993	270	t
+1	1	crear roles y usuarios	SQL	V1__crear_roles_y_usuarios.sql	1047942275	asesorias_app	2026-11-22 23:08:12.325179	158	t
+2	2	crear materias y profesor materia	SQL	V2__crear_materias_y_profesor_materia.sql	-789521193	asesorias_app	2026-11-22 23:08:12.660468	76	t
+3	3	crear asesorias e inscripciones	SQL	V3__crear_asesorias_e_inscripciones.sql	785193787	asesorias_app	2026-11-22 23:08:12.85554	118	t
+4	4	crear tokens	SQL	V4__crear_tokens.sql	1931524805	asesorias_app	2026-11-22 23:08:13.048527	80	t
+5	5	crear notificaciones	SQL	V5__crear_notificaciones.sql	441870441	asesorias_app	2026-11-22 23:08:13.196683	68	t
+6	6	crear tokens recuperacion	SQL	V6__crear_tokens_recuperacion.sql	-1620299635	asesorias_app	2026-11-22 23:08:13.334523	38	t
 \.
 
 
@@ -439,6 +453,27 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 --
 
 COPY public.inscripciones (id, asesoria_id, alumno_id, inscrito_en) FROM stdin;
+1	1	6	2026-11-22 23:08:37.457901
+2	1	7	2026-11-22 23:08:37.468585
+3	1	8	2026-11-22 23:08:37.477104
+4	2	6	2026-11-22 23:08:37.482604
+5	2	9	2026-11-22 23:08:37.489891
+6	3	10	2026-11-22 23:08:37.499028
+7	4	6	2026-11-22 23:08:37.50572
+8	4	11	2026-11-22 23:08:37.510294
+9	5	7	2026-11-22 23:08:37.517145
+10	5	8	2026-11-22 23:08:37.521723
+11	5	9	2026-11-22 23:08:37.525226
+12	5	12	2026-11-22 23:08:37.532152
+13	6	13	2026-11-22 23:08:37.535246
+14	7	6	2026-11-22 23:08:37.539562
+15	7	14	2026-11-22 23:08:37.544082
+16	8	15	2026-11-22 23:08:37.548394
+17	9	7	2026-11-22 23:08:37.554374
+18	10	8	2026-11-22 23:08:37.559426
+19	11	9	2026-11-22 23:08:37.564329
+20	12	6	2026-11-22 23:08:37.56757
+21	13	10	2026-11-22 23:08:37.572623
 \.
 
 
@@ -447,22 +482,18 @@ COPY public.inscripciones (id, asesoria_id, alumno_id, inscrito_en) FROM stdin;
 --
 
 COPY public.materias (id, codigo, nombre) FROM stdin;
-\.
-
-
---
--- Data for Name: notificaciones; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.notificaciones (id, usuario_id, canal, destino, asunto, estado, error, enviada_en) FROM stdin;
-\.
-
-
---
--- Data for Name: password_reset_tokens; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.password_reset_tokens (id, usuario_id, token_hash, expira_en, usado, creado_en) FROM stdin;
+1	MAT-101	Cálculo integral
+2	MAT-102	Cálculo diferencial
+3	MAT-103	Geometría analítica
+4	MAT-104	Álgebra lineal
+5	QUI-101	Química orgánica
+6	QUI-102	Química inorgánica
+7	BIO-101	Biología celular
+8	FIS-101	Física mecánica
+9	FIS-102	Electricidad y magnetismo
+10	PRO-101	Programación básica
+11	PRO-102	Estructuras de datos
+12	EST-101	Probabilidad y estadística
 \.
 
 
@@ -471,6 +502,19 @@ COPY public.password_reset_tokens (id, usuario_id, token_hash, expira_en, usado,
 --
 
 COPY public.profesor_materia (profesor_id, materia_id) FROM stdin;
+2	1
+2	4
+2	2
+3	5
+3	6
+3	12
+4	9
+4	3
+4	8
+4	2
+5	7
+5	11
+5	10
 \.
 
 
@@ -486,28 +530,25 @@ COPY public.roles (id, nombre) FROM stdin;
 
 
 --
--- Data for Name: tokens_recuperacion; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.tokens_recuperacion (id, usuario_id, token_hash, expira_en, usado, creado_en) FROM stdin;
-2	2	d366b4d824827538d55aef1ec4ddc1d24ebc1f2931d9f3f1e9c25bcef2303693	2026-11-21 00:35:28.262661	t	2026-11-21 00:05:28.263182
-\.
-
-
---
--- Data for Name: tokens_revocados; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.tokens_revocados (id, jti, expira_en, revocado_en) FROM stdin;
-\.
-
-
---
 -- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.usuarios (id, rol_id, nombre, correo, password_hash, telefono, avatar_url, activo, creado_en) FROM stdin;
-2	3	Francisco	jd.uarez.aniel08@gmail.com	$2a$10$1RrPCXsQIh7O6von1DtphuIJYrg4ybSKgZ2RDD3qkfXul3j6PVbrK	+529512468578	\N	t	2026-11-21 00:04:06.255831
+1	1	Administrador	admin@asesorias.com	$2a$10$JnoozGdtLJIexWI4ED.gfunP0RPbwOBwIBR3jNnbS1z7kQQc1.ILq	\N	\N	t	2026-11-22 23:08:34.566542
+2	2	Aracely Ramirez	aracely.ramirez@asesorias.com	$2a$10$ahNMeR.5rIRKtggD..1w/OQJIq6Xxdr4XE8uhCGeNdmJYk5u2RnXu	\N	\N	t	2026-11-22 23:08:35.093037
+3	2	Adelina Martinez	adelina.mtz@asesorias.com	$2a$10$hOdTFziF4CDnpLhIDNp6CeNYbOis4rLeCveBaFxyetD8AF5e39rui	\N	\N	t	2026-11-22 23:08:35.323978
+4	2	Bibiana Diaz	bibiana.diaz@asesorias.com	$2a$10$C3O.jB0.jBe8lp2cWQxOQOY1LzI8C2njzmPOM6J4DyK2JDnEhC0Re	\N	\N	t	2026-11-22 23:08:35.520704
+5	2	Luis Alonso	luis.alonso@asesorias.com	$2a$10$U3lMEAogXgXCNuupP3TeF.mtmB38sDehIRin996gTk8bjYiqfxLc6	\N	\N	t	2026-11-22 23:08:35.7252
+6	3	Isaac Diaz	carlos.juarez@asesorias.com	$2a$10$5Zd/0AhjP5LzxYIvugxZy.GgEfma1AVXd2pQFGp64XAaocUCceqP.	+529510000001	\N	t	2026-11-22 23:08:35.940294
+7	3	María Hernández	maria.hernandez@asesorias.com	$2a$10$8FatWFGEnb0GuHK1qRbRJu2291RAFj4LJQaQbeRbsM1mc8YmhCS6O	+529510000002	\N	t	2026-11-22 23:08:36.128493
+8	3	Diego Pérez	diego.perez@asesorias.com	$2a$10$hf6xSuT4H5DqpyhdVqvkU.8jQlFrQq/QBpUVenftON7X0BfZpLjTu	+529510000003	\N	t	2026-11-22 23:08:36.318463
+9	3	Ana López	ana.lopez@asesorias.com	$2a$10$366ZeBtFuY5xGl5k2QliX.tbIvSz1GD5MYWvasPJGYQCQOmkB4GEi	+529510000004	\N	t	2026-11-22 23:08:36.513584
+10	3	Jorge Santos	jorge.santos@asesorias.com	$2a$10$tGsdNdB1cNg/yWEm5.GznukqWO5SswBBUkkAD.LXw7Gz69Th9k2Xy	+529510000005	\N	t	2026-11-22 23:08:36.695505
+11	3	Valeria Cruz	valeria.cruz@asesorias.com	$2a$10$4fOBQauIjllq/8jkb/wv6OBOfqfhuFqzui66w.IrUlE1aTvc11uOO	+529510000006	\N	t	2026-11-22 23:08:36.875057
+12	3	Mateo Ramos	mateo.ramos@asesorias.com	$2a$10$d9DF8qQFcdncB02feFW2DeWAtjq/6YmFkL2NZNL.3IVDPrD1F58jS	+529510000007	\N	t	2026-11-22 23:08:37.015734
+13	3	Camila Torres	camila.torres@asesorias.com	$2a$10$p885Zq.iGtHnYnv9GE7kQ.zOUKZaK5Aqwn4Ofg.9uMz2RCJa/aIVG	+529510000008	\N	t	2026-11-22 23:08:37.107915
+14	3	Pablo Vargas	pablo.vargas@asesorias.com	$2a$10$akoD3dTrpD41afMvZcGJIOM8wQWOFgU.4Bfe9lQMwUTrIVrOAL/Y6	+529510000009	\N	t	2026-11-22 23:08:37.206141
+15	3	Fernanda Ortiz	fernanda.ortiz@asesorias.com	$2a$10$vX5pTqixW.Tvo7PBga2fPOuaqw/G4E.h35duuRRxKqdD8vGqSsZH2	+529510000010	\N	t	2026-11-22 23:08:37.303643
 \.
 
 
@@ -515,21 +556,21 @@ COPY public.usuarios (id, rol_id, nombre, correo, password_hash, telefono, avata
 -- Name: asesorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.asesorias_id_seq', 1, false);
+SELECT pg_catalog.setval('public.asesorias_id_seq', 15, true);
 
 
 --
 -- Name: inscripciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.inscripciones_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inscripciones_id_seq', 24, true);
 
 
 --
 -- Name: materias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.materias_id_seq', 1, false);
+SELECT pg_catalog.setval('public.materias_id_seq', 12, true);
 
 
 --
@@ -557,21 +598,21 @@ SELECT pg_catalog.setval('public.roles_id_seq', 3, true);
 -- Name: tokens_recuperacion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tokens_recuperacion_id_seq', 2, true);
+SELECT pg_catalog.setval('public.tokens_recuperacion_id_seq', 1, true);
 
 
 --
 -- Name: tokens_revocados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tokens_revocados_id_seq', 1, false);
+SELECT pg_catalog.setval('public.tokens_revocados_id_seq', 10, true);
 
 
 --
 -- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.usuarios_id_seq', 2, true);
+SELECT pg_catalog.setval('public.usuarios_id_seq', 16, true);
 
 
 --
@@ -879,5 +920,4 @@ ALTER TABLE ONLY public.usuarios
 -- PostgreSQL database dump complete
 --
 
-\unrestrict FvhZl0D2FXu4sSb3uLSHTujaz1ST1rDG31XIZ22Ic3pZS1utL60uzDWUctfPOep
 
