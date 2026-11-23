@@ -7,10 +7,13 @@ import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
 import EstadoVacio from '../components/EstadoVacio'
+import Avatar from '../components/Avatar'
 import FormularioAsesoria from './FormularioAsesoria'
 import { useToast } from '../context/ToastContext'
 import { mensajeError } from '../utils/errores'
+import { formatearFechaHora } from '../utils/fechas'
 import './admin/Admin.css'
+import './PanelProfesor.css'
 
 export default function PanelProfesor() {
   const { mostrarToast } = useToast()
@@ -154,21 +157,45 @@ export default function PanelProfesor() {
           mensajeVacio={<EstadoVacio icono="🗓️" titulo="Todavía no has creado ninguna asesoría" mensaje="Usa el botón Crear asesoría para publicar la primera." />}
         />
       )}
-
+      
       {seleccionada && (
-        <div>
-          <h2>Inscritos en {seleccionada.materiaNombre} — {seleccionada.fecha}</h2>
+        <section className="inscritos">
+          <header className="inscritos__encabezado">
+            <div>
+              <h2 className="inscritos__titulo">Inscritos en {seleccionada.materiaNombre}</h2>
+              <p className="inscritos__detalle">
+                {formatearFechaHora(`${seleccionada.fecha}T${seleccionada.hora}`)} · {seleccionada.lugar}
+              </p>
+            </div>
+            <div className="inscritos__acciones">
+              <span className="insignia insignia--neutra">
+                {seleccionada.inscritos} de {seleccionada.cupoMax} cupos
+              </span>
+              <Boton variante="secundario" onClick={() => setSeleccionada(null)}>Cerrar</Boton>
+            </div>
+          </header>
+
           {cargandoInscritos ? (
             <Spinner mensaje="Cargando inscritos..." />
+          ) : inscritos.length === 0 ? (
+            <EstadoVacio icono="👥" titulo="Nadie se ha inscrito todavía" mensaje="Cuando un alumno se inscriba, aparecerá aquí." />
           ) : (
-            <ul>
-              {inscritos.length === 0 && <li>Nadie se ha inscrito todavía.</li>}
+            <ul className="inscritos__lista">
               {inscritos.map((i) => (
-                <li key={i.id}>{i.alumnoNombre} — {i.alumnoCorreo}</li>
+                <li key={i.id} className="inscritos__item">
+                  <Avatar nombre={i.alumnoNombre} />
+                  <div className="inscritos__datos">
+                    <span className="inscritos__nombre">{i.alumnoNombre}</span>
+                    <span className="inscritos__correo">{i.alumnoCorreo}</span>
+                  </div>
+                  {i.inscritoEn && (
+                    <span className="inscritos__fecha">Se inscribió el {formatearFechaHora(i.inscritoEn)}</span>
+                  )}
+                </li>
               ))}
             </ul>
           )}
-        </div>
+        </section>
       )}
 
       <Modal
