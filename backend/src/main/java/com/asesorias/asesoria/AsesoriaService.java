@@ -108,7 +108,7 @@ public class AsesoriaService {
 
         List<Inscripcion> inscritos = inscripciones.findByAsesoriaId(id);
         for (Inscripcion i : inscritos) {
-            notificaciones.enviarWhatsapp(i.getAlumno(), mensajeCancelacionAsesoria(asesoria));
+            notificaciones.enviarSms(i.getAlumno(), mensajeCancelacionAsesoria(asesoria));
         }
 
         return AsesoriaRespuesta.de(asesoria, inscritos.size());

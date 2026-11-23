@@ -39,3 +39,6 @@ app.twilio.account-sid=
 app.twilio.auth-token=
 app.twilio.numero-sms=
 app.twilio.numero-whatsapp=
+
+# Cuenta de prueba: Twilio solo acepta plantillas predefinidas. Con cuenta de pago, déjalo vacío para mandar el texto real.
+app.twilio.plantilla-sms=
