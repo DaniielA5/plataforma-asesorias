@@ -170,7 +170,7 @@ En la carpeta `bruno/` hay una colección para el programa [Bruno](https://www.u
 | Integrante | Parte |
 |---|---|
 | Daniel Alexis Juarez Ramirez | Inicio de sesión y seguridad, asesorías e inscripciones, recuperar contraseña y correos, rediseño de inicio y login, base de datos y respaldo, despliegue en el VPS |
-| Isaac Emmanuel Díaz Martinez | Materias, usuarios y perfil (servidor), notificaciones y Twilio, datos de ejemplo, componentes y barra de navegación, formularios de acceso, pantallas de administración, crear y editar asesorías, colección de Bruno, README |
+| Isaac Emmanuel Díaz Martinez | Materias, usuarios y perfil (servidor), notificaciones y Twilio, datos de ejemplo, componentes y barra de navegación, formularios de acceso, pantallas de administración, colección de Bruno, README |
 
 
 ## Capturas
@@ -178,7 +178,7 @@ En la carpeta `bruno/` hay una colección para el programa [Bruno](https://www.u
 ### Pantallas
 | Inicio de sesión | Inicio del alumno |
 |---|---|
-| ![Login](capturas/login.png) | ![Inicio alumno](capturas/inicio-alumno.png) |
+| ![Login](capturas/login_web.png) | ![Inicio alumno](capturas/inicio-alumno.png) |
 
 | Usuarios (administrador) | Notificaciones (administrador) |
 |---|---|
