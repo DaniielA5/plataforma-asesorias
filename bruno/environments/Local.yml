@@ -1,0 +1,10 @@
+name: Local
+variables:
+  - name: baseUrl
+    value: http://localhost:8081/api
+    description: ""
+  - name: token
+    value: ""
+  - name: tokenAlumno
+    value: ""
+    description: ""

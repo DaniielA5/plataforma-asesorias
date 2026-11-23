@@ -1,0 +1,26 @@
+info:
+  name: Datos inválidos (400)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: '{"correo":"","password":""}'
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("responde con el código esperado", function () {
+          expect(res.status).to.equal(400);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
