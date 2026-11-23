@@ -24,3 +24,13 @@
   outline: 2px solid var(--color-primario);
   outline-offset: 1px;
 }
+
+.select-campo__select--error {
+  border-color: var(--color-error);
+}
+
+.select-campo__error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 0.85rem;
+}
