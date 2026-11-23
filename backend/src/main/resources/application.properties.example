@@ -42,3 +42,7 @@ app.twilio.numero-whatsapp=
 
 # Cuenta de prueba: Twilio solo acepta plantillas predefinidas. Con cuenta de pago, déjalo vacío para mandar el texto real.
 app.twilio.plantilla-sms=
+# Cuenta de prueba: WhatsApp no acepta texto libre, solo plantillas (ContentSid).
+# Ejemplo de la documentación de Twilio (Appointment Reminder): HXb5b62575e6e4ff6129ad7c8efe1f983e
+# Con cuenta de pago, déjalo vacío para mandar el texto real.
+app.twilio.content-sid-whatsapp=

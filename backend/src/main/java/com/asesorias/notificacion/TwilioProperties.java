@@ -9,6 +9,7 @@ public record TwilioProperties(
         String authToken,
         String numeroSms,
         String numeroWhatsapp,
-        String plantillaSms
+        String plantillaSms,
+        String contentSidWhatsapp
 ) {
 }
