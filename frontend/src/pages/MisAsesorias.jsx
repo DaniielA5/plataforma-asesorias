@@ -7,6 +7,7 @@ import Boton from '../components/Boton'
 import Modal from '../components/Modal'
 import EstadoVacio from '../components/EstadoVacio'
 import { useToast } from '../context/ToastContext'
+import { mensajeError } from '../utils/errores'
 
 export default function MisAsesorias() {
   const { mostrarToast } = useToast()
@@ -14,6 +15,7 @@ export default function MisAsesorias() {
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(false)
   const [porCancelar, setPorCancelar] = useState(null)
+  const [errorAccion, setErrorAccion] = useState('')
 
   useEffect(() => {
     cargar()
@@ -31,12 +33,13 @@ export default function MisAsesorias() {
   async function confirmarCancelacion() {
     const asesoriaId = porCancelar.asesoria.id
     setPorCancelar(null)
+    setErrorAccion('')
     try {
       await cancelarInscripcion(asesoriaId)
       mostrarToast('Inscripción cancelada')
       cargar()
     } catch (err) {
-      alert(err.response?.data?.mensaje || 'No se pudo cancelar')
+      setErrorAccion(mensajeError(err, 'No se pudo cancelar'))
     }
   }
 
@@ -61,7 +64,7 @@ export default function MisAsesorias() {
   return (
     <section>
       <h1>Mis asesorías</h1>
-
+      {errorAccion && <AvisoError mensaje={errorAccion} />}
       {cargando && <Spinner mensaje="Cargando tus asesorías..." />}
       {!cargando && error && <AvisoError onReintentar={cargar} />}
       {!cargando && !error && (
