@@ -78,7 +78,7 @@ export default function ProfesorInicio() {
         </div>
       ) : (
         <EstadoVacio
-          icono="🗓️"
+          icono=""
           titulo="No tienes asesorías próximas"
           mensaje="Publica una para que los alumnos puedan inscribirse."
           textoAccion="Crear asesoría"
