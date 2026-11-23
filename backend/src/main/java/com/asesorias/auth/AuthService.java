@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import com.asesorias.correo.CorreoService;
 import org.springframework.beans.factory.annotation.Value;
+import com.asesorias.correo.PlantillasCorreo;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -68,9 +69,9 @@ public class AuthService {
         usuario.setRol(roles.findByNombre(NombreRol.ALUMNO).orElseThrow());
         usuarios.save(usuario);
 
-        correo.enviar(usuario.getCorreo(), "Bienvenido a AyudITO",
-                "<p>Hola " + usuario.getNombre() + ",</p>"
-                + "<p>Tu cuenta en la Plataforma de Asesorías ya está lista. ¡Bienvenido!</p>");
+        PlantillasCorreo.Contenido bienvenida =
+                PlantillasCorreo.bienvenida(usuario.getNombre(), usuario.getCorreo(), urlFrontend);
+        correo.enviar(usuario.getCorreo(), "¡Bienvenido a AyudITO!", bienvenida.html(), bienvenida.texto());
         return responderConToken(usuario);
     }
 
@@ -119,9 +120,8 @@ public class AuthService {
             tokensRecuperacion.save(token);
 
             String enlace = urlFrontend + "/restablecer?token=" + tokenCrudo;
-            correo.enviar(usuario.getCorreo(), "Recupera tu contraseña",
-                    "<p>Da clic para crear una contraseña nueva (el enlace vence en 30 minutos):</p>"
-                    + "<p><a href=\"" + enlace + "\">" + enlace + "</a></p>");
+                        PlantillasCorreo.Contenido recuperacion = PlantillasCorreo.recuperacion(enlace);
+            correo.enviar(usuario.getCorreo(), "Recupera tu contraseña", recuperacion.html(), recuperacion.texto());
         });
     }
 

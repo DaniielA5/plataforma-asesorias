@@ -22,13 +22,23 @@ public class CorreoService {
     }
 
     public void enviar(String destinatario, String asunto, String cuerpoHtml) {
+        enviar(destinatario, asunto, cuerpoHtml, null);
+    }
+
+    /** Si hay texto plano, el correo lleva las dos versiones y el cliente de correo elige cuál mostrar. */
+    public void enviar(String destinatario, String asunto, String cuerpoHtml, String cuerpoTexto) {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, "UTF-8");
+            boolean conTexto = cuerpoTexto != null;
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, conTexto, "UTF-8");
             helper.setFrom(remitente);
             helper.setTo(destinatario);
             helper.setSubject(asunto);
-            helper.setText(cuerpoHtml, true);
+            if (conTexto) {
+                helper.setText(cuerpoTexto, cuerpoHtml);
+            } else {
+                helper.setText(cuerpoHtml, true);
+            }
             mailSender.send(mensaje);
         } catch (Exception e) {
             log.error("No se pudo enviar el correo a {}: {}", destinatario, e.getMessage());
