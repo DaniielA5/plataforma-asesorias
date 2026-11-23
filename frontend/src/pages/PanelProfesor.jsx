@@ -6,8 +6,10 @@ import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
 import EstadoVacio from '../components/EstadoVacio'
+import { useToast } from '../context/ToastContext'
 
 export default function PanelProfesor() {
+  const { mostrarToast } = useToast()
   const [pagina, setPagina] = useState(null)
   const [page, setPage] = useState(0)
   const [cargando, setCargando] = useState(true)
@@ -45,6 +47,7 @@ export default function PanelProfesor() {
     setPorCancelar(null)
     try {
       await cancelarAsesoria(id)
+      mostrarToast('Asesoría cancelada')
       cargar()
       if (seleccionada?.id === id) setSeleccionada(null)
     } catch (err) {

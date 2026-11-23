@@ -8,9 +8,11 @@ import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Select from '../components/Select'
 import EstadoVacio from '../components/EstadoVacio'
+import { useToast } from '../context/ToastContext'
 
 export default function CatalogoAsesorias() {
   const { usuario } = useAuth()
+  const { mostrarToast } = useToast() 
   const [materias, setMaterias] = useState([])
   const [materiaId, setMateriaId] = useState('')
   const [pagina, setPagina] = useState(null)
@@ -42,6 +44,7 @@ export default function CatalogoAsesorias() {
     setErrorInscripcion('')
     try {
       await inscribirse(asesoriaId)
+      mostrarToast('Te inscribiste correctamente')
       cargar()
     } catch (err) {
       setErrorInscripcion(err.response?.data?.mensaje || 'No se pudo inscribir')

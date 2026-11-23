@@ -6,8 +6,10 @@ import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
 import EstadoVacio from '../components/EstadoVacio'
+import { useToast } from '../context/ToastContext'
 
 export default function MisAsesorias() {
+  const { mostrarToast } = useToast()
   const [inscripciones, setInscripciones] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(false)
@@ -31,6 +33,7 @@ export default function MisAsesorias() {
     setPorCancelar(null)
     try {
       await cancelarInscripcion(asesoriaId)
+      mostrarToast('Inscripción cancelada')
       cargar()
     } catch (err) {
       alert(err.response?.data?.mensaje || 'No se pudo cancelar')
