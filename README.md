@@ -9,9 +9,9 @@ AyudITO es una página web donde los alumnos encuentran y reservan asesorías co
 | Qué | Dónde |
 |---|---|
 | Aplicación | https://ayudito.juarez.top |
-| API | https://ayudito.juarez.top/login |
+| API | https://ayudito.juarez.top/api |
 | Tablero del proyecto | https://github.com/users/Isaac051225/projects/2 |
-| Diseño en Figma | https://www.figma.com/design/Ibm7b85izfPN6iETO4eqrj/Asesorias?node-id=20-111 |
+| Diseño en Figma | https://www.figma.com/proto/Ibm7b85izfPN6iETO4eqrj/Asesorias?node-id=25-248&p=f&viewport=-2705%2C205%2C0.18&t=OfgIv70zdHWFNawM-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=25%3A248&page-id=20%3A111 |
 
 
 
@@ -49,11 +49,35 @@ AyudITO es una página web donde los alumnos encuentran y reservan asesorías co
 
 - **Servidor:** Java 21, Spring Boot 4.1, Spring Security con sesión por token (JWT)
 - **Página web:** React con Vite
-- **Base de datos:** PostgreSQL 17, con cambios controlados por Flyway
+- **Base de datos:** PostgreSQL 16 o superior, con cambios controlados por Flyway
 - **Avisos:** Twilio (SMS) y correo
 - **Pruebas de la API:** Bruno
 
+
 ## Cómo está hecho
+
+## Diseño
+
+El diseño se hizo en Figma antes de programar. El prototipo es navegable: se puede
+recorrer entre pantallas como si fuera la app.
+
+- **Prototipo navegable:** https://www.figma.com/proto/Ibm7b85izfPN6iETO4eqrj/Asesorias?node-id=25-248&p=f&viewport=-2705%2C205%2C0.18&t=OfgIv70zdHWFNawM-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=25%3A248&page-id=20%3A111
+- **Logo:** lo diseñamos nosotros. Está en `frontend/src/assets/logo.svg`.
+
+### Paleta de colores
+
+| Color | Código | Para qué se usa |
+|---|---|---|
+| Crema | `#F2EDE4` | Fondo de las pantallas (60 %) |
+| Verde oscuro | `#263128` | Color principal: barra de navegación y textos fuertes (30 %) |
+| Terracota | `#BC6245` | Acento: botones principales y detalles (10 %) |
+
+**Por qué estos colores:** el verde transmite calma y confianza, algo útil en una
+plataforma para estudiar. La terracota es un color cálido que contrasta con el verde
+(están casi opuestos en el círculo de color), así que los botones importantes se ven
+de inmediato. El crema, en vez de blanco puro, cansa menos la vista. Usamos la regla
+60-30-10: mucho color de base, algo de color principal y poco acento.
+
 
 El sistema tiene tres partes que se hablan entre sí:
 
@@ -115,6 +139,7 @@ erDiagram
     materias ||--o{ profesor_materia : "es impartida"
     usuarios ||--o{ notificaciones : recibe
     usuarios ||--o{ tokens_recuperacion : solicita
+    usuarios ||--o{ tokens_revocados : "invalida sesión"
 
     roles { bigint id PK
             string nombre }
@@ -157,7 +182,13 @@ erDiagram
                           string token_hash
                           timestamp expira_en
                           boolean usado }
+    tokens_revocados { bigint id PK
+                   string jti
+                   timestamp expira_en
+                   timestamp revocado_en }
 ```
+
+«profesor_materia es la relación muchos a muchos entre profesores y materias; inscripciones lo es entre alumnos y asesorías. tokens_revocados guarda los tokens cerrados con el logout.»
 
 
 ## Cómo probar la API
@@ -180,7 +211,7 @@ En la carpeta `bruno/` hay una colección para el programa [Bruno](https://www.u
 |---|---|
 | ![Login](capturas/login_web.png) | ![Inicio alumno](capturas/inicio-alumno.png) |
 
-| Usuarios (administrador) | Notificaciones (administrador) |
+| Inicio (administrador) | Usuarios (administrador) |
 |---|---|
 | ![Usuarios](capturas/usuario-admin.png) | ![Notificaciones](capturas/admin-usuario.png) |
 
@@ -189,5 +220,5 @@ En la carpeta `bruno/` hay una colección para el programa [Bruno](https://www.u
 | ![Panel](capturas/usuario-profesor.png) | ![Crear](capturas/crear-asesoria.png) |
 
 
-# Pruebas de la API (Bruno)
+## Pruebas de la API (Bruno)
 ![Pruebas contra el VPS: 11 de 11 pasan](capturas/bruno-vps.png)
