@@ -2,13 +2,17 @@ package com.asesorias.notificacion;
 
 import com.asesorias.usuario.Usuario;
 import com.twilio.Twilio;
+import com.twilio.converter.Converter;
 import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @ConditionalOnProperty(name = "app.twilio.habilitado", havingValue = "true")
@@ -56,7 +60,7 @@ public class NotificacionTwilio implements NotificacionService {
             if (destinatario.getTelefono() == null || destinatario.getTelefono().isBlank()) {
                 throw new IllegalStateException("El usuario no tiene teléfono registrado");
             }
-            Message.creator(new PhoneNumber(para), new PhoneNumber(de), cuerpo).create();
+            crearMensaje(canal, mensaje, cuerpo, para, de).create();
             registro.setEstado("ENVIADA");
         } catch (Exception e) {
             log.warn("No se pudo enviar el {} a {}: {}", canal, para, e.getMessage());
@@ -69,6 +73,29 @@ public class NotificacionTwilio implements NotificacionService {
         } catch (Exception e) {
             log.error("No se pudo guardar la notificación: {}", e.getMessage());
         }
+    }
+
+    private MessageCreator crearMensaje(String canal, String mensaje, String cuerpo, String para, String de) {
+        PhoneNumber destino = new PhoneNumber(para);
+        PhoneNumber origen = new PhoneNumber(de);
+
+        boolean conPlantilla = "WHATSAPP".equals(canal)
+                && propiedades.contentSidWhatsapp() != null
+                && !propiedades.contentSidWhatsapp().isBlank();
+        if (!conPlantilla) {
+            return Message.creator(destino, origen, cuerpo);
+        }
+
+        // Cuenta de prueba: WhatsApp no acepta texto libre, solo plantillas aprobadas (ContentSid).
+        Map<String, Object> variables = Map.of("1", limpiar(mensaje), "2", "AyudITO");
+        return Message.creator(destino, origen, (String) null)
+                .setContentSid(propiedades.contentSidWhatsapp())
+                .setContentVariables(Converter.mapToJson(variables));
+    }
+
+    // Las variables de una plantilla no admiten saltos de línea ni espacios repetidos.
+    private String limpiar(String texto) {
+        return recortar(texto.replaceAll("\\s+", " ").trim(), 200);
     }
 
     private String recortar(String texto, int maximo) {
