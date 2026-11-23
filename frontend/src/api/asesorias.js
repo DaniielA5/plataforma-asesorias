@@ -30,3 +30,11 @@ export function verInscritos(asesoriaId) {
 export function cancelarAsesoria(asesoriaId) {
   return api.patch(`/asesorias/${asesoriaId}/cancelar`).then((res) => res.data)
 }
+
+export function crearAsesoria(cuerpo) {
+  return api.post('/asesorias', cuerpo).then((res) => res.data)
+}
+
+export function editarAsesoria(id, cuerpo) {
+  return api.put(`/asesorias/${id}`, cuerpo).then((res) => res.data)
+}

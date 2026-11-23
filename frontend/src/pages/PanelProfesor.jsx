@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
-import { misAsesoriasProfesor, verInscritos, cancelarAsesoria } from '../api/asesorias'
+import { misAsesoriasProfesor, verInscritos, cancelarAsesoria, crearAsesoria, editarAsesoria } from '../api/asesorias'
+import { listarMaterias } from '../api/materias'
 import Tabla from '../components/Tabla'
 import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
 import Boton from '../components/Boton'
 import Modal from '../components/Modal'
+import FormularioAsesoria from './FormularioAsesoria'
+import { mensajeError } from '../utils/errores'
+import './admin/Admin.css'
 
 export default function PanelProfesor() {
   const [pagina, setPagina] = useState(null)
@@ -18,9 +22,20 @@ export default function PanelProfesor() {
 
   const [porCancelar, setPorCancelar] = useState(null)
 
+  const [materias, setMaterias] = useState([])
+  const [formulario, setFormulario] = useState(null)
+  const [guardando, setGuardando] = useState(false)
+  const [errorFormulario, setErrorFormulario] = useState('')
+  const [aviso, setAviso] = useState('')
+  const [errorAccion, setErrorAccion] = useState('')
+
   useEffect(() => {
     cargar()
   }, [page])
+
+  useEffect(() => {
+    listarMaterias().then(setMaterias).catch(() => {})
+  }, [])
 
   function cargar() {
     setCargando(true)
@@ -31,23 +46,54 @@ export default function PanelProfesor() {
       .finally(() => setCargando(false))
   }
 
+  function abrirFormulario(nuevo) {
+    setAviso('')
+    setErrorAccion('')
+    setErrorFormulario('')
+    setFormulario(nuevo)
+  }
+
+  async function guardar(cuerpo) {
+    setGuardando(true)
+    setErrorFormulario('')
+    try {
+      if (formulario.asesoria) {
+        await editarAsesoria(formulario.asesoria.id, cuerpo)
+        setAviso('Asesoría actualizada')
+      } else {
+        await crearAsesoria(cuerpo)
+        setAviso('Asesoría creada')
+      }
+      setFormulario(null)
+      cargar()
+    } catch (err) {
+      setErrorFormulario(mensajeError(err))
+    } finally {
+      setGuardando(false)
+    }
+  }
+
   function alVerInscritos(asesoria) {
     setSeleccionada(asesoria)
     setCargandoInscritos(true)
     verInscritos(asesoria.id)
       .then(setInscritos)
+      .catch(() => setInscritos([]))
       .finally(() => setCargandoInscritos(false))
   }
 
   async function confirmarCancelacion() {
     const id = porCancelar.id
     setPorCancelar(null)
+    setAviso('')
+    setErrorAccion('')
     try {
       await cancelarAsesoria(id)
+      setAviso('Asesoría cancelada')
       cargar()
       if (seleccionada?.id === id) setSeleccionada(null)
     } catch (err) {
-      alert(err.response?.data?.mensaje || 'No se pudo cancelar')
+      setErrorAccion(mensajeError(err, 'No se pudo cancelar'))
     }
   }
 
@@ -62,20 +108,40 @@ export default function PanelProfesor() {
       clave: 'acciones',
       titulo: '',
       render: (fila) => (
-        <>
+        <div className="admin__acciones">
           <Boton variante="secundario" onClick={() => alVerInscritos(fila)}>Ver inscritos</Boton>
-          {' '}
           {fila.estado === 'ACTIVA' && (
-            <Boton variante="secundario" onClick={() => setPorCancelar(fila)}>Cancelar</Boton>
+            <>
+              <Boton variante="secundario" onClick={() => abrirFormulario({ asesoria: fila })}>Editar</Boton>
+              <Boton variante="secundario" onClick={() => setPorCancelar(fila)}>Cancelar</Boton>
+            </>
           )}
-        </>
+        </div>
       ),
     },
   ]
 
   return (
     <section>
-      <h1>Mis asesorías (profesor)</h1>
+      <div className="admin__encabezado">
+        <h1>Mis asesorías (profesor)</h1>
+        <Boton onClick={() => abrirFormulario({})}>Crear asesoría</Boton>
+      </div>
+
+      {aviso && <p className="admin__aviso" role="status">{aviso}</p>}
+      {errorAccion && <AvisoError mensaje={errorAccion} />}
+
+      {formulario && (
+        <FormularioAsesoria
+          key={formulario.asesoria?.id ?? 'nueva'}
+          materias={materias}
+          inicial={formulario.asesoria}
+          onGuardar={guardar}
+          onCancelar={() => setFormulario(null)}
+          guardando={guardando}
+          errorGeneral={errorFormulario}
+        />
+      )}
 
       {cargando && <Spinner mensaje="Cargando tus asesorías..." />}
       {!cargando && error && <AvisoError onReintentar={cargar} />}
@@ -109,7 +175,7 @@ export default function PanelProfesor() {
       <Modal
         abierto={porCancelar !== null}
         titulo="Cancelar asesoría"
-        mensaje={porCancelar ? `¿Seguro que quieres cancelar la asesoría de ${porCancelar.materiaNombre} del ${porCancelar.fecha}? Se avisará por WhatsApp a quienes estén inscritos.` : ''}
+        mensaje={porCancelar ? `¿Seguro que quieres cancelar la asesoría de ${porCancelar.materiaNombre} del ${porCancelar.fecha}? Se avisará a quienes estén inscritos.` : ''}
         onConfirmar={confirmarCancelacion}
         onCancelar={() => setPorCancelar(null)}
       />
