@@ -1,0 +1,11 @@
+name: VPS
+variables:
+  - name: baseUrl
+    value: https://ayudito.juarez.top/api
+    description: ""
+  - name: tokenAlumno
+    value: ""
+    description: ""
+  - name: token
+    value: ""
+    description: ""
