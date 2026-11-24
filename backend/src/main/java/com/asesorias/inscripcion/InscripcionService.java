@@ -5,6 +5,7 @@ import com.asesorias.asesoria.AsesoriaRepository;
 import com.asesorias.asesoria.EstadoAsesoria;
 import com.asesorias.error.RecursoNoEncontradoException;
 import com.asesorias.error.ReglaNegocioException;
+import com.asesorias.notificacion.AvisoPorCorreo;
 import com.asesorias.notificacion.NotificacionService;
 import com.asesorias.usuario.Usuario;
 import com.asesorias.usuario.UsuarioRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,17 +21,23 @@ import java.util.stream.Collectors;
 @Service
 public class InscripcionService {
 
+    private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter HORA = DateTimeFormatter.ofPattern("HH:mm");
+
     private final InscripcionRepository inscripciones;
     private final AsesoriaRepository asesorias;
     private final UsuarioRepository usuarios;
     private final NotificacionService notificaciones;
+    private final AvisoPorCorreo avisoCorreo;
 
     public InscripcionService(InscripcionRepository inscripciones, AsesoriaRepository asesorias,
-                               UsuarioRepository usuarios, NotificacionService notificaciones) {
+                               UsuarioRepository usuarios, NotificacionService notificaciones,
+                               AvisoPorCorreo avisoCorreo) {
         this.inscripciones = inscripciones;
         this.asesorias = asesorias;
         this.usuarios = usuarios;
         this.notificaciones = notificaciones;
+        this.avisoCorreo = avisoCorreo;
     }
 
     @Transactional
@@ -55,7 +63,9 @@ public class InscripcionService {
         inscripcion.setAlumno(alumno);
         inscripciones.save(inscripcion);
 
-        notificaciones.enviarWhatsapp(alumno, mensajeConfirmacion(asesoria));
+        String mensaje = mensajeConfirmacion(asesoria);
+        notificaciones.enviarWhatsapp(alumno, mensaje);
+        avisoCorreo.avisar(alumno, "Inscripción confirmada", mensaje);
 
         return InscritoRespuesta.de(inscripcion);
     }
@@ -70,7 +80,9 @@ public class InscripcionService {
 
         inscripciones.delete(inscripcion);
 
-        notificaciones.enviarWhatsapp(alumno, mensajeCancelacion(asesoria));
+        String mensaje = mensajeCancelacion(asesoria);
+        notificaciones.enviarWhatsapp(alumno, mensaje);
+        avisoCorreo.avisar(alumno, "Cancelaste tu inscripción", mensaje);
     }
 
     @Transactional(readOnly = true)
@@ -107,11 +119,14 @@ public class InscripcionService {
     }
 
     private String mensajeConfirmacion(Asesoria asesoria) {
-        return "Te inscribiste a " + asesoria.getMateria().getNombre() + " el " + asesoria.getFecha()
-                + " a las " + asesoria.getHora() + " en " + asesoria.getLugar();
+        return "Quedaste inscrito en " + asesoria.getMateria().getNombre()
+                + " el " + asesoria.getFecha().format(FECHA)
+                + " a las " + asesoria.getHora().format(HORA)
+                + " en " + asesoria.getLugar() + ".";
     }
 
     private String mensajeCancelacion(Asesoria asesoria) {
-        return "Cancelaste tu inscripción a " + asesoria.getMateria().getNombre() + " del " + asesoria.getFecha();
+        return "Cancelaste tu inscripción a " + asesoria.getMateria().getNombre()
+                + " del " + asesoria.getFecha().format(FECHA) + ".";
     }
 }
