@@ -2,6 +2,7 @@ package com.asesorias.asesoria;
 
 import com.asesorias.comun.PaginaRespuesta;
 import com.asesorias.error.RecursoNoEncontradoException;
+import com.asesorias.error.ReglaNegocioException;
 import com.asesorias.inscripcion.InscripcionRepository;
 import com.asesorias.materia.Materia;
 import com.asesorias.materia.MateriaRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.asesorias.inscripcion.Inscripcion;
 import com.asesorias.notificacion.NotificacionService;
+
 
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,7 @@ public class AsesoriaService {
     public AsesoriaRespuesta crear(Long profesorId, AsesoriaPeticion peticion) {
         Materia materia = materias.findById(peticion.materiaId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("La materia no existe"));
+        exigirQueLaImparte(profesorId, materia);
         Usuario profesor = usuarios.getReferenceById(profesorId);
 
         Asesoria asesoria = new Asesoria();
@@ -93,17 +96,30 @@ public class AsesoriaService {
     @Transactional
     public AsesoriaRespuesta editar(Long profesorId, Long id, AsesoriaPeticion peticion) {
         Asesoria asesoria = buscarPropia(profesorId, id);
+        if (asesoria.getEstado() != EstadoAsesoria.ACTIVA) {
+            throw new ReglaNegocioException("Solo se pueden editar asesorías activas");
+        }
         Materia materia = materias.findById(peticion.materiaId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("La materia no existe"));
+        if (!materia.getId().equals(asesoria.getMateria().getId())) {
+            exigirQueLaImparte(profesorId, materia);
+        }
+        long inscritos = inscripciones.countByAsesoriaId(id);
+        if (peticion.cupoMax() < inscritos) {
+            throw new ReglaNegocioException("El cupo no puede ser menor a los " + inscritos + " alumnos ya inscritos");
+        }
 
         aplicarCambios(asesoria, materia, peticion);
 
-        return AsesoriaRespuesta.de(asesoria, inscripciones.countByAsesoriaId(id));
+        return AsesoriaRespuesta.de(asesoria, inscritos);
     }
 
     @Transactional
     public AsesoriaRespuesta cancelar(Long profesorId, Long id) {
         Asesoria asesoria = buscarPropia(profesorId, id);
+        if (asesoria.getEstado() == EstadoAsesoria.CANCELADA) {
+            throw new ReglaNegocioException("Esta asesoría ya está cancelada");
+        }
         asesoria.setEstado(EstadoAsesoria.CANCELADA);
 
         List<Inscripcion> inscritos = inscripciones.findByAsesoriaId(id);
@@ -127,6 +143,12 @@ public class AsesoriaService {
         asesoria.setNotas(peticion.notas());
     }
 
+    private void exigirQueLaImparte(Long profesorId, Materia materia) {
+        if (!usuarios.existsByIdAndMateriasImpartidasId(profesorId, materia.getId())) {
+            throw new ReglaNegocioException("La materia " + materia.getNombre() + " no está entre las que impartes");
+        }
+    }
+    
     private Asesoria buscar(Long id) {
         return asesorias.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("La asesoría no existe"));
