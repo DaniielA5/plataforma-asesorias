@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 public class CorreoService {
 
     private static final Logger log = LoggerFactory.getLogger(CorreoService.class);
-
+    /** Lo que ve el destinatario como remitente en su bandeja, en vez de "no-reply". */
+    private static final String NOMBRE_REMITENTE = "AyudITO";
     private final JavaMailSender mailSender;
     private final String remitente;
 
@@ -31,7 +32,7 @@ public class CorreoService {
             MimeMessage mensaje = mailSender.createMimeMessage();
             boolean conTexto = cuerpoTexto != null;
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, conTexto, "UTF-8");
-            helper.setFrom(remitente);
+            helper.setFrom(remitente, NOMBRE_REMITENTE);
             helper.setTo(destinatario);
             helper.setSubject(asunto);
             if (conTexto) {
@@ -42,6 +43,7 @@ public class CorreoService {
             mailSender.send(mensaje);
         } catch (Exception e) {
             log.error("No se pudo enviar el correo a {}: {}", destinatario, e.getMessage());
+            
         }
     }
 }
