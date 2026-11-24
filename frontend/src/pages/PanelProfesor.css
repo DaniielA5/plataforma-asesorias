@@ -88,3 +88,6 @@
     white-space: normal;
   }
 }
+.panel-profesor__fecha {
+  white-space: nowrap;
+}

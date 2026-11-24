@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { misAsesoriasProfesor, verInscritos, cancelarAsesoria, crearAsesoria, editarAsesoria } from '../api/asesorias'
-import { listarMaterias } from '../api/materias'
+import { materiasDeProfesor } from '../api/materias'
+import { useAuth } from '../context/AuthContext'
 import Tabla from '../components/Tabla'
 import Spinner from '../components/Spinner'
 import AvisoError from '../components/AvisoError'
@@ -17,6 +18,7 @@ import './PanelProfesor.css'
 
 export default function PanelProfesor() {
   const { mostrarToast } = useToast()
+  const { usuario } = useAuth()
   const [pagina, setPagina] = useState(null)
   const [page, setPage] = useState(0)
   const [cargando, setCargando] = useState(true)
@@ -38,9 +40,10 @@ export default function PanelProfesor() {
     cargar()
   }, [page])
 
-  useEffect(() => {
-    listarMaterias().then(setMaterias).catch(() => {})
-  }, [])
+useEffect(() => {
+    if (!usuario?.id) return
+    materiasDeProfesor(usuario.id).then(setMaterias).catch(() => {})
+  }, [usuario?.id])
 
   function cargar() {
     setCargando(true)
@@ -102,8 +105,13 @@ export default function PanelProfesor() {
 
   const columnas = [
     { clave: 'materiaNombre', titulo: 'Materia' },
-    { clave: 'fecha', titulo: 'Fecha' },
-    { clave: 'hora', titulo: 'Hora' },
+        {
+      clave: 'fecha',
+      titulo: 'Fecha y hora',
+      render: (fila) => (
+        <span className="panel-profesor__fecha">{formatearFechaHora(`${fila.fecha}T${fila.hora}`)}</span>
+      ),
+    },
     { clave: 'lugar', titulo: 'Lugar' },
     { clave: 'cupo', titulo: 'Cupo', render: (fila) => `${fila.inscritos}/${fila.cupoMax}` },
     { clave: 'estado', titulo: 'Estado' },
