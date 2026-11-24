@@ -120,6 +120,20 @@ public final class PlantillasCorreo {
         return new Contenido(html, texto);
     }
 
+    public static Contenido aviso(String encabezado, String mensaje) {
+        String contenido = titulo(esc(encabezado)) + parrafo(esc(mensaje));
+        String pie = "Recibiste este aviso porque tienes una cuenta en AyudITO.";
+
+        String html = MARCO
+                .replace("{{resumen}}", esc(mensaje))
+                .replace("{{pie}}", pie)
+                .replace("{{contenido}}", contenido);
+
+        String texto = encabezado + "\n\n" + mensaje + "\n\n" + pie + "\n";
+
+        return new Contenido(html, texto);
+    }
+
     // ---- piezas reutilizables ----
 
     private static String titulo(String texto) {

@@ -22,12 +22,15 @@ public class CorreoService {
         this.remitente = remitente;
     }
 
-    public void enviar(String destinatario, String asunto, String cuerpoHtml) {
-        enviar(destinatario, asunto, cuerpoHtml, null);
+    public boolean enviar(String destinatario, String asunto, String cuerpoHtml) {
+        return enviar(destinatario, asunto, cuerpoHtml, null);
     }
 
-    /** Si hay texto plano, el correo lleva las dos versiones y el cliente de correo elige cuál mostrar. */
-    public void enviar(String destinatario, String asunto, String cuerpoHtml, String cuerpoTexto) {
+    /**
+     * Si hay texto plano, el correo lleva las dos versiones y el cliente de correo elige cuál mostrar.
+     * Devuelve false si no se pudo enviar; nunca lanza excepción.
+     */
+    public boolean enviar(String destinatario, String asunto, String cuerpoHtml, String cuerpoTexto) {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
             boolean conTexto = cuerpoTexto != null;
@@ -41,9 +44,10 @@ public class CorreoService {
                 helper.setText(cuerpoHtml, true);
             }
             mailSender.send(mensaje);
+            return true;
         } catch (Exception e) {
             log.error("No se pudo enviar el correo a {}: {}", destinatario, e.getMessage());
-            
+            return false;
         }
     }
 }

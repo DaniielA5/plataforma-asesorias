@@ -11,6 +11,7 @@ import com.asesorias.inscripcion.Inscripcion;
 import com.asesorias.inscripcion.InscripcionRepository;
 import com.asesorias.materia.Materia;
 import com.asesorias.materia.MateriaRepository;
+import com.asesorias.notificacion.AvisoPorCorreo;
 import com.asesorias.notificacion.NotificacionService;
 import com.asesorias.usuario.Usuario;
 import com.asesorias.usuario.UsuarioRepository;
@@ -45,6 +46,7 @@ public class AsesoriasServiceTest {
     @Mock MateriaRepository materias;
     @Mock UsuarioRepository usuarios;
     @Mock NotificacionService notificaciones;
+    @Mock AvisoPorCorreo avisoCorreo;
 
     @InjectMocks AsesoriaService servicio;
 
@@ -69,6 +71,7 @@ public class AsesoriasServiceTest {
         assertThrows(ReglaNegocioException.class, () -> servicio.cancelar(PROFESOR_ID, ASESORIA_ID));
 
         verify(notificaciones, never()).enviarSms(any(), anyString());
+        verify(avisoCorreo, never()).avisar(any(), anyString(), anyString());
     }
 
     @Test
@@ -81,6 +84,7 @@ public class AsesoriasServiceTest {
 
         assertEquals(EstadoAsesoria.CANCELADA, respuesta.estado());
         verify(notificaciones, times(2)).enviarSms(any(), anyString());
+        verify(avisoCorreo, times(2)).avisar(any(), anyString(), anyString());
     }
 
     @Test

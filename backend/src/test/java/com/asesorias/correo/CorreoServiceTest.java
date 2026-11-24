@@ -6,7 +6,12 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import org.springframework.mail.MailSendException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,5 +29,15 @@ class CorreoServiceTest {
         ArgumentCaptor<MimeMessage> enviado = ArgumentCaptor.forClass(MimeMessage.class);
         verify(sender).send(enviado.capture());
         assertEquals("AyudITO <no-reply@mg.juarez.top>", enviado.getValue().getFrom()[0].toString());
+    }
+
+    @Test
+    void siElServidorDeCorreoFallaDevuelveFalseYNoLanzaExcepcion() {
+        JavaMailSender sender = mock(JavaMailSender.class);
+        when(sender.createMimeMessage()).thenReturn(new JavaMailSenderImpl().createMimeMessage());
+        doThrow(new MailSendException("sin servidor")).when(sender).send(any(MimeMessage.class));
+        CorreoService servicio = new CorreoService(sender, "no-reply@mg.juarez.top");
+
+        assertFalse(servicio.enviar("alumno@asesorias.com", "Asunto", "<p>Hola</p>", "Hola"));
     }
 }

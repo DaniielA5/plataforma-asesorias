@@ -15,9 +15,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.asesorias.inscripcion.Inscripcion;
+import com.asesorias.notificacion.AvisoPorCorreo;
 import com.asesorias.notificacion.NotificacionService;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,20 +27,24 @@ import java.util.stream.Collectors;
 @Service
 public class AsesoriaService {
 
+    private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     private final AsesoriaRepository asesorias;
     private final InscripcionRepository inscripciones;
     private final MateriaRepository materias;
     private final UsuarioRepository usuarios;
     private final NotificacionService notificaciones;
+    private final AvisoPorCorreo avisoCorreo;
 
     public AsesoriaService(AsesoriaRepository asesorias, InscripcionRepository inscripciones,
                             MateriaRepository materias, UsuarioRepository usuarios,
-                            NotificacionService notificaciones) {
+                            NotificacionService notificaciones, AvisoPorCorreo avisoCorreo) {
         this.asesorias = asesorias;
         this.inscripciones = inscripciones;
         this.materias = materias;
         this.usuarios = usuarios;
         this.notificaciones = notificaciones;
+        this.avisoCorreo = avisoCorreo;
     }
 
     @Transactional(readOnly = true)
@@ -123,15 +129,18 @@ public class AsesoriaService {
         asesoria.setEstado(EstadoAsesoria.CANCELADA);
 
         List<Inscripcion> inscritos = inscripciones.findByAsesoriaId(id);
+        String mensaje = mensajeCancelacionAsesoria(asesoria);
         for (Inscripcion i : inscritos) {
-            notificaciones.enviarSms(i.getAlumno(), mensajeCancelacionAsesoria(asesoria));
+            notificaciones.enviarSms(i.getAlumno(), mensaje);
+            avisoCorreo.avisar(i.getAlumno(), "Se canceló tu asesoría", mensaje);
         }
 
         return AsesoriaRespuesta.de(asesoria, inscritos.size());
     }
 
     private String mensajeCancelacionAsesoria(Asesoria asesoria) {
-        return "Se canceló la asesoría de " + asesoria.getMateria().getNombre() + " del " + asesoria.getFecha();
+        return "El profesor canceló la asesoría de " + asesoria.getMateria().getNombre()
+                + " del " + asesoria.getFecha().format(FECHA) + ".";
     }
 
     private void aplicarCambios(Asesoria asesoria, Materia materia, AsesoriaPeticion peticion) {
