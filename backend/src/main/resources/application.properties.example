@@ -46,3 +46,7 @@ app.twilio.plantilla-sms=
 # Ejemplo de la documentación de Twilio (Appointment Reminder): HXb5b62575e6e4ff6129ad7c8efe1f983e
 # Con cuenta de pago, déjalo vacío para mandar el texto real.
 app.twilio.content-sid-whatsapp=
+
+# ===== Google (iniciar sesión con Google) =====
+# ID de cliente web de Google Cloud (no es secreto). Vacío = el acceso con Google queda apagado.
+app.google.client-id=
