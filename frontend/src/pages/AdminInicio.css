@@ -8,7 +8,7 @@
 }
 
 .admin-inicio__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 2rem;
   margin: 0;
 }
@@ -63,7 +63,7 @@
 }
 
 .admin-inicio__panel h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 1.1rem;
   margin: 0 0 var(--espacio-base);
 }

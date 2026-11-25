@@ -8,7 +8,7 @@
 }
 
 .inicio__titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 2rem;
   margin: 0;
   color: var(--color-texto);
@@ -41,7 +41,7 @@
 }
 
 .inicio__destacada-titulo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 1.5rem;
   margin: 8px 0 0;
 }
@@ -79,7 +79,7 @@
 }
 
 .inicio__tabla h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 1.25rem;
 }
 

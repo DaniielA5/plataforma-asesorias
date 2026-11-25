@@ -1,36 +1,27 @@
-.formulario-pagina {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--espacio-pagina);
-}
-
 .formulario {
-  width: 100%;
-  max-width: 420px;
   display: flex;
   flex-direction: column;
   gap: calc(var(--espacio-base) * 2);
-  padding: var(--espacio-pagina);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-tarjeta);
-}
-
-.formulario__logo {
-  height: 64px;
-  align-self: center;
+  width: 100%;
 }
 
 .formulario__titulo {
   margin: 0;
+  font-size: 2.125rem;
+  font-weight: 400;
+  text-align: center;
   color: var(--color-primario);
 }
 
 .formulario__texto {
   margin: 0;
+  text-align: center;
   color: var(--color-texto-secundario);
+}
+
+/* El subtítulo va pegado a su título. */
+.formulario__titulo + .formulario__texto {
+  margin-top: calc(var(--espacio-base) * -1);
 }
 
 .formulario__exito {
@@ -42,31 +33,45 @@
   color: var(--color-texto);
 }
 
-/*para navegar entre pantallas*/
+/* ---------- Enlaces ---------- */
+
+.formulario__olvido {
+  align-self: flex-end;
+  font-size: 0.9rem;
+}
+
 .formulario__enlaces {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-base);
   font-size: 0.9rem;
+  text-align: center;
   color: var(--color-texto-secundario);
 }
 
-.formulario__enlaces a {
-  color: var(--color-acento);
-  text-decoration: none;
+.formulario a {
+  color: var(--color-acento-oscuro);
   font-weight: 600;
+  text-decoration: none;
 }
 
-.formulario__enlaces a:hover {
+.formulario a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 480px) {
-  .formulario-pagina {
-    padding: var(--espacio-base);
-  }
+/* Input y Boton se usan en toda la app: estos cambios solo aplican dentro de .formulario */
 
-  .formulario {
-    padding: var(--espacio-seccion);
-  }
+.formulario .input-campo__input {
+  height: 48px;
+  padding: 0 20px;
+  background: var(--color-superficie);
+  border-radius: var(--radio-pastilla);
+}
+
+.formulario .boton--primario {
+  height: 50px;
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-weight: 700;
 }
