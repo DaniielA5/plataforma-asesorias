@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Input from '../../components/Input'
 import Boton from '../../components/Boton'
 import AvisoError from '../../components/AvisoError'
+import BotonGoogle from '../../components/BotonGoogle'
 import ReglasPassword from '../../components/ReglasPassword'
 import {
   evaluarReglasPassword,
@@ -59,7 +60,7 @@ function FormularioRegistro({ onSubmit, enviando = false, errorGeneral = '' }) {
     <form className="formulario" onSubmit={enviar} noValidate>
       <h1 className="formulario__titulo">Crear cuenta</h1>
       <p className="formulario__texto">Regístrate para apartar tus asesorías.</p>
-
+      <BotonGoogle texto="signup_with" separador="o regístrate con tu correo" />
       {errorGeneral && <AvisoError mensaje={errorGeneral} />}
 
       <Input

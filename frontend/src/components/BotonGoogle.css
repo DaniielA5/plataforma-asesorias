@@ -1,0 +1,28 @@
+.boton-google {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espacio-base) * 2);
+}
+
+/* Se reserva el alto del botón para que el formulario no brinque mientras carga. */
+.boton-google__boton {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.boton-google__separador {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--espacio-base) * 1.5);
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}
+
+.boton-google__separador::before,
+.boton-google__separador::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-borde);
+}
