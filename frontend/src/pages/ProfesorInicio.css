@@ -21,7 +21,7 @@
 }
 
 .profesor-inicio__panel h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--fuente-titulo);
   font-size: 1.1rem;
   margin: 0;
 }

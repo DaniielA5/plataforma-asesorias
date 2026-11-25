@@ -18,6 +18,9 @@
   --color-acento: #BC6245;
   --color-acento-texto: #FBF7EF;
   --color-acento-suave: #F0D9CC;
+  --color-acento-claro: #F0B49A;
+  --color-acento-fuerte: #A8533A;
+  --color-acento-oscuro: #8F4430;
 
   /* Secundarios y estados */
   --color-secundario-suave: #DDE4CB;
@@ -28,6 +31,10 @@
   /* Tintes de las tarjetas de materias */
   --color-tinte-gris: #D7DBCF;
   --color-tinte-amarillo: #F4E2C3;
+
+  /* Tipografía */
+  --fuente-titulo: 'Outfit', system-ui, sans-serif;
+  --fuente-texto: 'Plus Jakarta Sans', system-ui, sans-serif;
 
   /* Espaciados (Figma: Layout/Spacing) */
   --espacio-base: 8px;
