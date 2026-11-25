@@ -33,6 +33,11 @@ public class AuthController {
         return authService.login(peticion);
     }
 
+    @PostMapping("/google")
+    public TokenRespuesta google(@Valid @RequestBody GooglePeticion peticion) {
+        return authService.loginConGoogle(peticion);
+    }
+    
     @GetMapping("/me")
     public UsuarioRespuesta yo(@AuthenticationPrincipal Jwt jwt) {
         return authService.usuarioActual(Long.valueOf(jwt.getSubject()));
