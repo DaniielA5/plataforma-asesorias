@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Input from '../../components/Input'
 import Boton from '../../components/Boton'
 import AvisoError from '../../components/AvisoError'
+import BotonGoogle from '../../components/BotonGoogle'
 import { validarCorreo } from './validaciones'
 import './Formulario.css'
 import { Link } from 'react-router-dom'
@@ -31,7 +32,7 @@ function FormularioLogin({ onSubmit, enviando = false, errorGeneral = '' }) {
     <form className="formulario" onSubmit={enviar} noValidate>
       <h1 className="formulario__titulo">Iniciar sesión</h1>
       <p className="formulario__texto">Entra para ver tus asesorías.</p>
-
+      <BotonGoogle />
       {errorGeneral && <AvisoError mensaje={errorGeneral} />}
 
       <Input

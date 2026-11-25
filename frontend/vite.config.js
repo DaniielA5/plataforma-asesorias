@@ -8,6 +8,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
+          // Google lo pide para probar su botón en http://localhost.
+      headers: { 'Referrer-Policy': 'no-referrer-when-downgrade' },
       proxy: {
         '/api': backend,
       },

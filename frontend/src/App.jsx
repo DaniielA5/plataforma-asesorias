@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Recuperar from './pages/Recuperar'
 import Restablecer from './pages/Restablecer'
+import CompletarTelefono from './pages/CompletarTelefono'
 import RutaProtegida from './components/RutaProtegida'
 import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
@@ -24,6 +25,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/restablecer" element={<Restablecer />} />
+        <Route path="/completar-telefono" element={<CompletarTelefono />} />
       </Route>
 
       <Route
