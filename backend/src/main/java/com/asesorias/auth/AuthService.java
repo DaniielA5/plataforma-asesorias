@@ -34,14 +34,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final TokenRevocadoRepository tokensRevocados;
-
     private final TokenRecuperacionRepository tokensRecuperacion;
     private final CorreoService correo;
+    private final VerificadorGoogle verificadorGoogle;
     private final String urlFrontend;
 
     public AuthService(UsuarioRepository usuarios, RolRepository roles, PasswordEncoder passwordEncoder,
                        JwtService jwtService, TokenRevocadoRepository tokensRevocados,
                        TokenRecuperacionRepository tokensRecuperacion, CorreoService correo,
+                       VerificadorGoogle verificadorGoogle,
                        @Value("${app.frontend.url}") String urlFrontend) {
         this.usuarios = usuarios;
         this.roles = roles;
@@ -50,6 +51,7 @@ public class AuthService {
         this.tokensRevocados = tokensRevocados;
         this.tokensRecuperacion = tokensRecuperacion;
         this.correo = correo;
+        this.verificadorGoogle = verificadorGoogle;
         this.urlFrontend = urlFrontend;
     }
 
@@ -69,9 +71,7 @@ public class AuthService {
         usuario.setRol(roles.findByNombre(NombreRol.ALUMNO).orElseThrow());
         usuarios.save(usuario);
 
-        PlantillasCorreo.Contenido bienvenida =
-                PlantillasCorreo.bienvenida(usuario.getNombre(), usuario.getCorreo(), urlFrontend);
-        correo.enviar(usuario.getCorreo(), "¡Bienvenido a AyudITO!", bienvenida.html(), bienvenida.texto());
+        enviarBienvenida(usuario);
         return responderConToken(usuario);
     }
 
@@ -84,6 +84,66 @@ public class AuthService {
             throw new DisabledException("Usuario desactivado");
         }
         return responderConToken(usuario);
+    }
+
+    @Transactional
+    public TokenRespuesta loginConGoogle(GooglePeticion peticion) {
+        CuentaGoogle cuenta = verificadorGoogle.verificar(peticion.credencial());
+        Usuario usuario = usuarios.findByGoogleSub(cuenta.sub())
+                .orElseGet(() -> vincularOCrear(cuenta));
+        if (!usuario.isActivo()) {
+            throw new ReglaNegocioException("Tu cuenta está desactivada, habla con el administrador");
+        }
+        return responderConToken(usuario);
+    }
+
+    private Usuario vincularOCrear(CuentaGoogle cuenta) {
+        return usuarios.findByCorreo(cuenta.correo())
+                .map(existente -> vincular(existente, cuenta))
+                .orElseGet(() -> crearDesdeGoogle(cuenta));
+    }
+
+    private Usuario vincular(Usuario usuario, CuentaGoogle cuenta) {
+        if (!cuenta.correoConfiable()) {
+            throw new ReglaNegocioException("Ese correo ya tiene cuenta, entra con tu contraseña");
+        }
+        if (usuario.getGoogleSub() != null) {
+            throw new ReglaNegocioException("Ese correo ya está unido a otra cuenta de Google");
+        }
+        usuario.setGoogleSub(cuenta.sub());
+        // El registro no comprueba el correo: la contraseña anterior pudo ponerla otra persona.
+        usuario.setPasswordHash(passwordAleatorio());
+        return usuario;
+    }
+
+    private Usuario crearDesdeGoogle(CuentaGoogle cuenta) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombreDe(cuenta));
+        usuario.setCorreo(cuenta.correo());
+        usuario.setGoogleSub(cuenta.sub());
+        usuario.setPasswordHash(passwordAleatorio());
+        usuario.setRol(roles.findByNombre(NombreRol.ALUMNO).orElseThrow());
+        usuarios.save(usuario);
+        enviarBienvenida(usuario);
+        return usuario;
+    }
+
+    private String nombreDe(CuentaGoogle cuenta) {
+        String nombre = cuenta.nombre() == null || cuenta.nombre().isBlank()
+                ? cuenta.correo().split("@")[0]
+                : cuenta.nombre().trim();
+        return nombre.length() <= 120 ? nombre : nombre.substring(0, 120);
+    }
+
+    // La columna es obligatoria. Nadie conoce esta contraseña; se puede crear una con "recuperar".
+    private String passwordAleatorio() {
+        return passwordEncoder.encode(generarTokenCrudo());
+    }
+
+    private void enviarBienvenida(Usuario usuario) {
+        PlantillasCorreo.Contenido bienvenida =
+                PlantillasCorreo.bienvenida(usuario.getNombre(), usuario.getCorreo(), urlFrontend);
+        correo.enviar(usuario.getCorreo(), "¡Bienvenido a AyudITO!", bienvenida.html(), bienvenida.texto());
     }
 
     @Transactional(readOnly = true)
