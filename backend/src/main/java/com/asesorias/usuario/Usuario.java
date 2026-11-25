@@ -40,6 +40,9 @@ public class Usuario {
     @Column(name = "avatar_url", length = 255)
     private String avatarUrl;
 
+    @Column(name = "google_sub", unique = true, length = 255)
+    private String googleSub;
+    
     @Column(nullable = false)
     private boolean activo = true;
 

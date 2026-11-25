@@ -15,6 +15,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpec
     Optional<Usuario> findByCorreo(String correo);
 
     @EntityGraph(attributePaths = "rol")
+    Optional<Usuario> findByGoogleSub(String googleSub);
+
+    @EntityGraph(attributePaths = "rol")
     Optional<Usuario> findConRolById(Long id);
     
     boolean existsByIdAndMateriasImpartidasId(Long id, Long materiaId);
