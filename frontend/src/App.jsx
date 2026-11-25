@@ -8,6 +8,7 @@ import CatalogoAsesorias from './pages/CatalogoAsesorias'
 import MisAsesorias from './pages/MisAsesorias'
 import PanelProfesor from './pages/PanelProfesor'
 import Layout from './layout/Layout'
+import AuthLayout from './layout/AuthLayout'
 import AdminLayout from './pages/admin/AdminLayout'
 import UsuariosAdmin from './pages/admin/UsuariosAdmin'
 import MateriasAdmin from './pages/admin/MateriasAdmin'
@@ -18,10 +19,12 @@ import Inicio from './pages/Inicio'
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/registro" element={<Registro />} />
-      <Route path="/recuperar" element={<Recuperar />} />
-      <Route path="/restablecer" element={<Restablecer />} />
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/recuperar" element={<Recuperar />} />
+        <Route path="/restablecer" element={<Restablecer />} />
+      </Route>
 
       <Route
         element={

@@ -3,7 +3,6 @@ import Input from '../../components/Input'
 import Boton from '../../components/Boton'
 import AvisoError from '../../components/AvisoError'
 import ReglasPassword from '../../components/ReglasPassword'
-import logo from '../../assets/logo.svg'
 import {
   evaluarReglasPassword,
   passwordValida,
@@ -57,77 +56,74 @@ function FormularioRegistro({ onSubmit, enviando = false, errorGeneral = '' }) {
   }
 
   return (
-    <div className="formulario-pagina">
-      <form className="formulario" onSubmit={enviar} noValidate>
-        <img className="formulario__logo" src={logo} alt="AyudITO" />
-        <h1 className="formulario__titulo">Crear cuenta</h1>
+    <form className="formulario" onSubmit={enviar} noValidate>
+      <h1 className="formulario__titulo">Crear cuenta</h1>
+      <p className="formulario__texto">Regístrate para apartar tus asesorías.</p>
 
-        {errorGeneral && <AvisoError mensaje={errorGeneral} />}
+      {errorGeneral && <AvisoError mensaje={errorGeneral} />}
 
+      <Input
+        id="nombre"
+        etiqueta="Nombre completo"
+        valor={datos.nombre}
+        onChange={cambiar('nombre')}
+        onBlur={tocar('nombre')}
+        placeholder="Carlos Juárez"
+        error={mostrar('nombre')}
+      />
+
+      <Input
+        id="correo"
+        etiqueta="Correo"
+        tipo="email"
+        valor={datos.correo}
+        onChange={cambiar('correo')}
+        onBlur={tocar('correo')}
+        placeholder="tu@correo.com"
+        error={mostrar('correo')}
+      />
+
+      <Input
+        id="telefono"
+        etiqueta="Teléfono"
+        tipo="tel"
+        valor={datos.telefono}
+        onChange={cambiar('telefono')}
+        onBlur={tocar('telefono')}
+        placeholder="+529512345672"
+        error={mostrar('telefono')}
+      />
+
+      <div>
         <Input
-          id="nombre"
-          etiqueta="Nombre completo"
-          valor={datos.nombre}
-          onChange={cambiar('nombre')}
-          onBlur={tocar('nombre')}
-          placeholder="Carlos Juárez"
-          error={mostrar('nombre')}
-        />
-
-        <Input
-          id="correo"
-          etiqueta="Correo"
-          tipo="email"
-          valor={datos.correo}
-          onChange={cambiar('correo')}
-          onBlur={tocar('correo')}
-          placeholder="tu@correo.com"
-          error={mostrar('correo')}
-        />
-
-        <Input
-          id="telefono"
-          etiqueta="Teléfono"
-          tipo="tel"
-          valor={datos.telefono}
-          onChange={cambiar('telefono')}
-          onBlur={tocar('telefono')}
-          placeholder="+529512345672"
-          error={mostrar('telefono')}
-        />
-
-        <div>
-          <Input
-            id="password"
-            etiqueta="Contraseña"
-            tipo="password"
-            valor={datos.password}
-            onChange={cambiar('password')}
-            onBlur={tocar('password')}
-          />
-          <ReglasPassword reglas={reglas} activa={Boolean(datos.password) || intento} />
-        </div>
-
-        <Input
-          id="confirmacion"
-          etiqueta="Confirmar contraseña"
+          id="password"
+          etiqueta="Contraseña"
           tipo="password"
-          valor={datos.confirmacion}
-          onChange={cambiar('confirmacion')}
-          onBlur={tocar('confirmacion')}
-          error={mostrar('confirmacion')}
+          valor={datos.password}
+          onChange={cambiar('password')}
+          onBlur={tocar('password')}
         />
+        <ReglasPassword reglas={reglas} activa={Boolean(datos.password) || intento} />
+      </div>
 
-        <Boton tipo="submit" deshabilitado={enviando}>
-          {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
-        </Boton>
+      <Input
+        id="confirmacion"
+        etiqueta="Confirmar contraseña"
+        tipo="password"
+        valor={datos.confirmacion}
+        onChange={cambiar('confirmacion')}
+        onBlur={tocar('confirmacion')}
+        error={mostrar('confirmacion')}
+      />
 
-        <div className="formulario__enlaces">
-          <span>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></span>
-        </div>
-        
-      </form>
-    </div>
+      <Boton tipo="submit" deshabilitado={enviando}>
+        {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
+      </Boton>
+
+      <div className="formulario__enlaces">
+        <span>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></span>
+      </div>
+    </form>
   )
 }
 

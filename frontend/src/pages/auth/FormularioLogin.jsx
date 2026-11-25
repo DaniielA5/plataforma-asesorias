@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Input from '../../components/Input'
 import Boton from '../../components/Boton'
 import AvisoError from '../../components/AvisoError'
-import logo from '../../assets/logo.svg'
 import { validarCorreo } from './validaciones'
 import './Formulario.css'
 import { Link } from 'react-router-dom'
@@ -29,45 +28,43 @@ function FormularioLogin({ onSubmit, enviando = false, errorGeneral = '' }) {
   }
 
   return (
-    <div className="formulario-pagina">
-      <form className="formulario" onSubmit={enviar} noValidate>
-        <img className="formulario__logo" src={logo} alt="AyudITO" />
-        <h1 className="formulario__titulo">Iniciar sesión</h1>
+    <form className="formulario" onSubmit={enviar} noValidate>
+      <h1 className="formulario__titulo">Iniciar sesión</h1>
+      <p className="formulario__texto">Entra para ver tus asesorías.</p>
 
-        {errorGeneral && <AvisoError mensaje={errorGeneral} />}
+      {errorGeneral && <AvisoError mensaje={errorGeneral} />}
 
-        <Input
-          id="correo"
-          etiqueta="Correo"
-          tipo="email"
-          valor={correo}
-          onChange={(e) => { setCorreo(e.target.value); tocar('correo') }}
-          onBlur={() => tocar('correo')}
-          placeholder="tu@correo.com"
-          error={mostrar('correo')}
-        />
+      <Input
+        id="correo"
+        etiqueta="Correo"
+        tipo="email"
+        valor={correo}
+        onChange={(e) => { setCorreo(e.target.value); tocar('correo') }}
+        onBlur={() => tocar('correo')}
+        placeholder="tu@correo.com"
+        error={mostrar('correo')}
+      />
 
-        <Input
-          id="password"
-          etiqueta="Contraseña"
-          tipo="password"
-          valor={password}
-          onChange={(e) => { setPassword(e.target.value); tocar('password') }}
-          onBlur={() => tocar('password')}
-          error={mostrar('password')}
-        />
+      <Input
+        id="password"
+        etiqueta="Contraseña"
+        tipo="password"
+        valor={password}
+        onChange={(e) => { setPassword(e.target.value); tocar('password') }}
+        onBlur={() => tocar('password')}
+        error={mostrar('password')}
+      />
 
-        <Boton tipo="submit" deshabilitado={enviando}>
-          {enviando ? 'Entrando...' : 'Entrar'}
-        </Boton>
+      <Link className="formulario__olvido" to="/recuperar">¿Olvidaste tu contraseña?</Link>
 
-        <div className="formulario__enlaces">
-          <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
-          <Link to="/registro">¿No tienes cuenta? Regístrate</Link>
-        </div>
-        
-      </form>
-    </div>
+      <Boton tipo="submit" deshabilitado={enviando}>
+        {enviando ? 'Entrando...' : 'Entrar'}
+      </Boton>
+
+      <div className="formulario__enlaces">
+        <span>¿No tienes cuenta? <Link to="/registro">Regístrate</Link></span>
+      </div>
+    </form>
   )
 }
 

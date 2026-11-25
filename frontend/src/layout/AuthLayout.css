@@ -1,0 +1,179 @@
+.auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* ---------- Burbuja ---------- */
+
+/* sticky: si el formulario es largo (registro), la burbuja se queda a la vista. */
+.auth__burbuja {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 600px;
+  padding: 24px 0 16px 24px;
+}
+
+.auth__panel {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-seccion);
+  overflow: hidden;
+  padding: 48px 52px;
+  border-radius: 72px 72px 72px 0;
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+}
+
+.auth__cola {
+  flex-shrink: 0;
+  width: 140px;
+  height: 48px;
+  margin-top: -1px;
+  fill: var(--color-primario);
+}
+
+.auth__silueta {
+  position: absolute;
+  right: 0;
+  bottom: 18%;
+  height: 44%;
+  opacity: 0.09;
+  pointer-events: none;
+}
+
+/* position: relative deja el texto por encima de la silueta. */
+.auth__mensaje {
+  position: relative;
+  margin-block: auto;
+}
+
+.auth__titular {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, min(4.2vw, 7.2vh), 3.375rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.auth__titular em {
+  font-style: normal;
+  color: var(--color-acento-claro);
+}
+
+.auth__descripcion {
+  max-width: 460px;
+  margin: var(--espacio-seccion) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--color-secundario-suave);
+}
+
+.auth__chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth__globo {
+  max-width: 360px;
+  margin: 0;
+  padding: 16px 22px;
+}
+
+.auth__globo--pregunta {
+  align-self: flex-start;
+  border-radius: 26px 26px 26px 4px;
+  background: var(--color-primario-texto);
+  color: var(--color-texto);
+}
+
+.auth__globo--respuesta {
+  align-self: flex-end;
+  border-radius: 26px 26px 4px 26px;
+  background: var(--color-acento-fuerte);
+  color: var(--color-acento-texto);
+}
+
+/* ---------- Formulario ---------- */
+
+.auth__contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-pagina);
+}
+
+.auth__caja {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espacio-base) * 2);
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth__logo {
+  align-self: center;
+  width: 168px;
+}
+
+/* Pantallas de escritorio bajitas (laptop): logo más chico para que quepa todo. */
+@media (min-width: 901px) and (max-height: 760px) {
+  .auth__logo {
+    width: 120px;
+  }
+
+  .auth__contenido {
+    padding-block: var(--espacio-base);
+  }
+}
+
+/* Celular y tablet: la burbuja pasa arriba y solo deja el titular. */
+@media (max-width: 900px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+
+  .auth__burbuja {
+    position: static;
+    height: auto;
+    min-height: 0;
+    padding: 12px 12px 0;
+  }
+
+  .auth__panel {
+    padding: 32px 24px;
+    border-radius: 40px 40px 40px 0;
+  }
+
+  .auth__descripcion,
+  .auth__chat {
+    display: none;
+  }
+
+  .auth__silueta {
+    bottom: 0;
+    height: 95%;
+  }
+
+  .auth__cola {
+    width: 72px;
+    height: 25px;
+  }
+
+  .auth__contenido {
+    padding: var(--espacio-base) var(--espacio-seccion) var(--espacio-pagina);
+  }
+
+  .auth__logo {
+    width: 120px;
+  }
+}

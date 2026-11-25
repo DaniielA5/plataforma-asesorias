@@ -6,7 +6,6 @@ import AvisoError from '../components/AvisoError'
 import ReglasPassword from '../components/ReglasPassword'
 import { evaluarReglasPassword, passwordValida, validarConfirmacion } from './auth/validaciones'
 import { restablecerPassword } from '../api/auth'
-import logo from '../assets/logo.svg'
 import './auth/Formulario.css'
 
 export default function Restablecer() {
@@ -48,48 +47,45 @@ export default function Restablecer() {
 
   if (!token) {
     return (
-      <div className="formulario-pagina">
-        <div className="formulario">
-          <p>Este enlace no es válido. <Link to="/recuperar">Pide uno nuevo</Link>.</p>
-        </div>
+      <div className="formulario">
+        <p className="formulario__texto">
+          Este enlace no es válido. <Link to="/recuperar">Pide uno nuevo</Link>.
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="formulario-pagina">
-      <form className="formulario" onSubmit={enviar} noValidate>
-        <img className="formulario__logo" src={logo} alt="AyudITO" />
-        <h1 className="formulario__titulo">Crear nueva contraseña</h1>
+    <form className="formulario" onSubmit={enviar} noValidate>
+      <h1 className="formulario__titulo">Crear nueva contraseña</h1>
 
-        {error && <AvisoError mensaje={error} />}
+      {error && <AvisoError mensaje={error} />}
 
-        <div>
-          <Input
-            id="password"
-            etiqueta="Contraseña nueva"
-            tipo="password"
-            valor={password}
-            onChange={(e) => { setPassword(e.target.value); tocar('password')() }}
-            onBlur={tocar('password')}
-          />
-          <ReglasPassword reglas={reglas} activa={Boolean(password) || intento} />
-        </div>
-
+      <div>
         <Input
-          id="confirmacion"
-          etiqueta="Confirmar contraseña"
+          id="password"
+          etiqueta="Contraseña nueva"
           tipo="password"
-          valor={confirmacion}
-          onChange={(e) => { setConfirmacion(e.target.value); tocar('confirmacion')() }}
-          onBlur={tocar('confirmacion')}
-          error={mostrar('confirmacion')}
+          valor={password}
+          onChange={(e) => { setPassword(e.target.value); tocar('password')() }}
+          onBlur={tocar('password')}
         />
+        <ReglasPassword reglas={reglas} activa={Boolean(password) || intento} />
+      </div>
 
-        <Boton tipo="submit" deshabilitado={enviando}>
-          {enviando ? 'Guardando...' : 'Guardar nueva contraseña'}
-        </Boton>
-      </form>
-    </div>
+      <Input
+        id="confirmacion"
+        etiqueta="Confirmar contraseña"
+        tipo="password"
+        valor={confirmacion}
+        onChange={(e) => { setConfirmacion(e.target.value); tocar('confirmacion')() }}
+        onBlur={tocar('confirmacion')}
+        error={mostrar('confirmacion')}
+      />
+
+      <Boton tipo="submit" deshabilitado={enviando}>
+        {enviando ? 'Guardando...' : 'Guardar nueva contraseña'}
+      </Boton>
+    </form>
   )
 }
