@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.asesorias.notificacion.TipoAviso;
+
 @Service
 public class InscripcionService {
 
@@ -64,7 +66,8 @@ public class InscripcionService {
         inscripciones.save(inscripcion);
 
         String mensaje = mensajeConfirmacion(asesoria);
-        notificaciones.enviarWhatsapp(alumno, mensaje);
+        notificaciones.enviarWhatsappConPlantilla(alumno, TipoAviso.CONFIRMACION_INSCRIPCION,
+                variablesAviso(alumno, asesoria), mensaje);
         avisoCorreo.avisar(alumno, "Inscripción confirmada", mensaje);
 
         return InscritoRespuesta.de(inscripcion);
@@ -81,7 +84,8 @@ public class InscripcionService {
         inscripciones.delete(inscripcion);
 
         String mensaje = mensajeCancelacion(asesoria);
-        notificaciones.enviarWhatsapp(alumno, mensaje);
+        notificaciones.enviarWhatsappConPlantilla(alumno, TipoAviso.CANCELACION_INSCRIPCION,
+                variablesAviso(alumno, asesoria), mensaje);
         avisoCorreo.avisar(alumno, "Cancelaste tu inscripción", mensaje);
     }
 
@@ -124,6 +128,16 @@ public class InscripcionService {
                 + " a las " + asesoria.getHora().format(HORA)
                 + " en " + asesoria.getLugar() + ".";
     }
+
+
+    // Variables {{1}}, {{2}}, {{3}} de las plantillas: nombre, materia y fecha con hora.
+    private List<String> variablesAviso(Usuario alumno, Asesoria asesoria) {
+        return List.of(
+                alumno.getNombre(),
+                asesoria.getMateria().getNombre(),
+                asesoria.getFecha().format(FECHA) + " a las " + asesoria.getHora().format(HORA));
+    }
+
 
     private String mensajeCancelacion(Asesoria asesoria) {
         return "Cancelaste tu inscripción a " + asesoria.getMateria().getNombre()

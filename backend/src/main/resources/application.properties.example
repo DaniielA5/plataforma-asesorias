@@ -47,6 +47,21 @@ app.twilio.plantilla-sms=
 # Con cuenta de pago, déjalo vacío para mandar el texto real.
 app.twilio.content-sid-whatsapp=
 
+
+# ===== WhatsApp con la API de Meta (Cloud API) =====
+# Con habilitado=true se usa NotificacionMeta para WhatsApp (tiene prioridad sobre Twilio y la simulada).
+# Todos los avisos (inscripción, cancelación del alumno y cancelación del profesor) salen por WhatsApp.
+app.meta.habilitado=false
+app.meta.phone-number-id=
+app.meta.access-token=
+app.meta.version=v25.0
+app.meta.idioma=es_MX
+# Nombres exactos de las plantillas aprobadas en WhatsApp Manager. Si se dejan vacíos, se manda texto libre
+# (solo llega si la persona escribió al número en las últimas 24 horas).
+app.meta.plantilla-confirmacion=
+app.meta.plantilla-cancelacion-inscripcion=
+app.meta.plantilla-cancelacion-asesoria=
+
 # ===== Google (iniciar sesión con Google) =====
 # ID de cliente web de Google Cloud (no es secreto). Vacío = el acceso con Google queda apagado.
 app.google.client-id=

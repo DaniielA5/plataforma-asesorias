@@ -13,6 +13,7 @@ import com.asesorias.materia.Materia;
 import com.asesorias.materia.MateriaRepository;
 import com.asesorias.notificacion.AvisoPorCorreo;
 import com.asesorias.notificacion.NotificacionService;
+import com.asesorias.notificacion.TipoAviso;
 import com.asesorias.usuario.Usuario;
 import com.asesorias.usuario.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,18 +67,18 @@ public class AsesoriasServiceTest {
     }
 
     @Test
-    void noPermiteCancelarDosVecesNiReenviarLosSms() {
+    void noPermiteCancelarDosVecesNiReenviarLosAvisos() {
         Asesoria yaCancelada = asesoria(EstadoAsesoria.CANCELADA);
         when(asesorias.findById(ASESORIA_ID)).thenReturn(Optional.of(yaCancelada));
 
         assertThrows(ReglaNegocioException.class, () -> servicio.cancelar(PROFESOR_ID, ASESORIA_ID));
 
-        verify(notificaciones, never()).enviarSms(any(), anyString());
+        verify(notificaciones, never()).enviarWhatsappConPlantilla(any(), any(), anyList(), anyString());
         verify(avisoCorreo, never()).avisar(any(), anyString(), anyString());
     }
 
     @Test
-    void alCancelarUnaActivaAvisaPorSmsACadaInscrito() {
+    void alCancelarUnaActivaAvisaPorWhatsappACadaInscrito() {
         Asesoria activa = asesoria(EstadoAsesoria.ACTIVA);
         when(asesorias.findById(ASESORIA_ID)).thenReturn(Optional.of(activa));
         when(inscripciones.findByAsesoriaId(ASESORIA_ID)).thenReturn(List.of(inscripcion(activa), inscripcion(activa)));
@@ -83,7 +86,8 @@ public class AsesoriasServiceTest {
         AsesoriaRespuesta respuesta = servicio.cancelar(PROFESOR_ID, ASESORIA_ID);
 
         assertEquals(EstadoAsesoria.CANCELADA, respuesta.estado());
-        verify(notificaciones, times(2)).enviarSms(any(), anyString());
+        verify(notificaciones, times(2)).enviarWhatsappConPlantilla(
+                any(), eq(TipoAviso.CANCELACION_ASESORIA), anyList(), anyString());
         verify(avisoCorreo, times(2)).avisar(any(), anyString(), anyString());
     }
 
@@ -137,9 +141,12 @@ public class AsesoriasServiceTest {
     }
 
     private static Inscripcion inscripcion(Asesoria asesoria) {
+        Usuario alumno = new Usuario();
+        alumno.setNombre("Ana Lopez");
+
         Inscripcion i = new Inscripcion();
         i.setAsesoria(asesoria);
-        i.setAlumno(new Usuario());
+        i.setAlumno(alumno);
         return i;
     }
 
