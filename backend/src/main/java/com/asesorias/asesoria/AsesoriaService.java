@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.asesorias.inscripcion.Inscripcion;
 import com.asesorias.notificacion.AvisoPorCorreo;
 import com.asesorias.notificacion.NotificacionService;
+import com.asesorias.notificacion.TipoAviso;
 
 
 import java.time.format.DateTimeFormatter;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class AsesoriaService {
 
     private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    private static final DateTimeFormatter HORA = DateTimeFormatter.ofPattern("HH:mm");
     private final AsesoriaRepository asesorias;
     private final InscripcionRepository inscripciones;
     private final MateriaRepository materias;
@@ -120,7 +121,8 @@ public class AsesoriaService {
         return AsesoriaRespuesta.de(asesoria, inscritos);
     }
 
-    @Transactional
+    
+     @Transactional
     public AsesoriaRespuesta cancelar(Long profesorId, Long id) {
         Asesoria asesoria = buscarPropia(profesorId, id);
         if (asesoria.getEstado() == EstadoAsesoria.CANCELADA) {
@@ -131,12 +133,22 @@ public class AsesoriaService {
         List<Inscripcion> inscritos = inscripciones.findByAsesoriaId(id);
         String mensaje = mensajeCancelacionAsesoria(asesoria);
         for (Inscripcion i : inscritos) {
-            notificaciones.enviarSms(i.getAlumno(), mensaje);
+            notificaciones.enviarWhatsappConPlantilla(i.getAlumno(), TipoAviso.CANCELACION_ASESORIA,
+                    variablesAviso(i.getAlumno(), asesoria), mensaje);
             avisoCorreo.avisar(i.getAlumno(), "Se canceló tu asesoría", mensaje);
         }
 
         return AsesoriaRespuesta.de(asesoria, inscritos.size());
     }
+
+    // Variables {{1}}, {{2}}, {{3}} de la plantilla: nombre, materia y fecha con hora.
+    private List<String> variablesAviso(Usuario alumno, Asesoria asesoria) {
+        return List.of(
+                alumno.getNombre(),
+                asesoria.getMateria().getNombre(),
+                asesoria.getFecha().format(FECHA) + " a las " + asesoria.getHora().format(HORA));
+    }
+
 
     private String mensajeCancelacionAsesoria(Asesoria asesoria) {
         return "El profesor canceló la asesoría de " + asesoria.getMateria().getNombre()
